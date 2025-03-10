@@ -31,7 +31,7 @@ const EditModal = ({ user }: Props) => {
 		setIsLoading(true)
 		const res = await updateUser({ id: user._id, type: 'updateImage', [isProfileImage ? 'profileImage' : 'coverImage']: image })
 		if (res?.serverError || res?.validationErrors || !res?.data) {
-			return onError('Something went wrong')
+			return onError('Quelque chose s\'est mal passé')
 		}
 		if (res.data.failure) {
 			return onError(res.data.failure)

@@ -36,7 +36,7 @@ export default function Modal({
           </button>
           {step && totalSteps && (
             <div className="text-xl font-bold">
-              Step {step} of {totalSteps}
+              Etape {step} sur {totalSteps}
             </div>
           )}
         </div>

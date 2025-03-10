@@ -12,7 +12,7 @@ export const authOptions: AuthOptions = {
       name: "credentials",
       credentials: {
         email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" },
+        password: { label: "Mot de passe", type: "password" },
       },
       async authorize(credentials) {
         await connectToDatabase();

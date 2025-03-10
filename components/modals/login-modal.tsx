@@ -36,8 +36,8 @@ export default function LoginModal() {
 		setIsLoading(true)
 		const res = await login(values)
 		if (res?.serverError || res?.validationErrors || !res?.data) {
-			setError('Something went wrong')
-			return onError('Something went wrong')
+			setError('Quelque chose s\'est mal passé')
+			return onError('Quelque chose s\'est mal passé')
 		}
 		if (res.data.failure) {
 			setError(res.data.failure)
@@ -80,13 +80,13 @@ export default function LoginModal() {
 					render={({ field }) => (
 						<FormItem>
 							<FormControl>
-								<Input placeholder='Password' disabled={isLoading} type='password' {...field} />
+								<Input placeholder='Mot de passe' disabled={isLoading} type='password' {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
 					)}
 				/>
-				<Button label={'Login'} type='submit' secondary fullWidth large disabled={isLoading} isLoading={isLoading} />
+				<Button label={'Connexion'} type='submit' secondary fullWidth large disabled={isLoading} isLoading={isLoading} />
 			</form>
 		</Form>
 	)
@@ -94,10 +94,10 @@ export default function LoginModal() {
 	const footer = (
 		<div className='text-neutral-400 text-center mb-4'>
 			<p>
-				First time using X?
+				Première fois sur Y ?
 				<span className='text-white cursor-pointer hover:underline' onClick={onToggle}>
 					{' '}
-					Create an account
+					Créer un compte
 				</span>
 			</p>
 		</div>

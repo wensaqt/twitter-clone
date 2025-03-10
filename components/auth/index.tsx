@@ -61,8 +61,8 @@ export default function Auth() {
                 <p className="mx-4">ou</p>
                 <div className="h-px bg-gray-700 w-1/2" />
               </div>
-              <div className="w-full md:w-[60%]">
-                <h3 className="font-medium text-xl mb-4">Déjà inscrit ?</h3>
+              <div className="w-full md:w-[100%]">
+                <h3 className="font-medium text-xl text-center mb-4">Déjà inscrit ?</h3>
                 <Button
                   label={"Se connecter"}
                   fullWidth

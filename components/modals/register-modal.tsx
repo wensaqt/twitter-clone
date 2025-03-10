@@ -34,9 +34,9 @@ export default function RegisterModal() {
 	const footer = (
 		<div className='text-neutral-400 text-center mb-4'>
 			<p>
-				Already have an account?{' '}
+				Déjà inscrit ?{' '}
 				<span className='text-white cursor-pointer hover:underline' onClick={onToggle}>
-					Sign in
+					Se connecter
 				</span>
 			</p>
 		</div>
@@ -73,8 +73,8 @@ function RegisterStep1({
 		setIsLoading(true)
 		const res = await register({ email: values.email, name: values.name, step: 1 })
 		if (res?.serverError || res?.validationErrors || !res?.data) {
-			setError('Something went wrong')
-			return onError('Something went wrong')
+			setError('Quelque chose s\'est mal passé')
+			return onError('Quelque chose s\'est mal passé')
 		}
 		if (res.data.failure) {
 			setError(res.data.failure)
@@ -105,7 +105,7 @@ function RegisterStep1({
 					render={({ field }) => (
 						<FormItem>
 							<FormControl>
-								<Input placeholder='Name' disabled={isLoading} {...field} />
+								<Input placeholder='Nom' disabled={isLoading} {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -123,7 +123,7 @@ function RegisterStep1({
 						</FormItem>
 					)}
 				/>
-				<Button label={'Next'} type='submit' secondary fullWidth large disabled={isLoading} isLoading={isLoading} />
+				<Button label={'Suivant'} type='submit' secondary fullWidth large disabled={isLoading} isLoading={isLoading} />
 			</form>
 		</Form>
 	)
@@ -149,8 +149,8 @@ function RegisterStep2({ data }: { data: { name: string; email: string } }) {
 			password: values.password,
 		})
 		if (res?.serverError || res?.validationErrors || !res?.data) {
-			setError('Something went wrong')
-			return onError('Something went wrong')
+			setError('Quelque chose s\'est mal passé')
+			return onError('Quelque chose s\'est mal passé')
 		}
 		if (res.data.failure) {
 			setError(res.data.failure)
@@ -182,7 +182,7 @@ function RegisterStep2({ data }: { data: { name: string; email: string } }) {
 					render={({ field }) => (
 						<FormItem>
 							<FormControl>
-								<Input placeholder='Username' disabled={isLoading} {...field} />
+								<Input placeholder="Nom d'utilisateur" disabled={isLoading} {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -194,7 +194,7 @@ function RegisterStep2({ data }: { data: { name: string; email: string } }) {
 					render={({ field }) => (
 						<FormItem>
 							<FormControl>
-								<Input placeholder='Password' type='password' disabled={isLoading} {...field} />
+								<Input placeholder='Mot de passe' type='password' disabled={isLoading} {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
