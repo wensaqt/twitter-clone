@@ -12,7 +12,7 @@ export async function POST(req: Request) {
 
     if (!isExistingUser) {
       return NextResponse.json(
-        { error: "Email does not exist" },
+        { error: "Email n'existe pas" },
         { status: 400 }
       );
     }
@@ -21,7 +21,7 @@ export async function POST(req: Request) {
 
     if (!isPasswordValid) {
       return NextResponse.json(
-        { error: "Password is incorrect" },
+        { error: "Mot de passe incorrect" },
         { status: 400 }
       );
     }

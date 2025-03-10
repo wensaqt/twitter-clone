@@ -18,7 +18,7 @@ export async function POST(req: Request) {
 
     await Notification.create({
       user: String(post.user),
-      body: "Someone replied on your post!",
+      body: "Quelqu'un a répondu à votre post !",
     });
 
     await User.findOneAndUpdate(
@@ -45,7 +45,7 @@ export async function PUT(req: Request) {
 
     await Notification.create({
       user: String(comment.user),
-      body: "Someone liked on your replied post!",
+      body: "Quelqu'un a like votre réponse au post!",
     });
 
     await User.findOneAndUpdate(
@@ -53,7 +53,7 @@ export async function PUT(req: Request) {
       { $set: { hasNewNotifications: true } }
     );
 
-    return NextResponse.json({ message: "Comment liked" });
+    return NextResponse.json({ message: "Commentaire aimé" });
   } catch (error) {
     const result = error as Error;
     return NextResponse.json({ error: result.message }, { status: 400 });
@@ -70,7 +70,7 @@ export async function DELETE(req: Request) {
       $pull: { likes: currentUser._id },
     });
 
-    return NextResponse.json({ message: "Comment liked" });
+    return NextResponse.json({ message: "Commentaire aimé" });
   } catch (error) {
     const result = error as Error;
     return NextResponse.json({ error: result.message }, { status: 400 });

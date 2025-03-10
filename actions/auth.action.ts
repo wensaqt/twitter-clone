@@ -12,10 +12,10 @@ export const login = actionClient.schema(loginSchema).action<ReturnActionType>(a
 	const { email, password } = parsedInput
 	const isExistingUser = await User.findOne({ email })
 
-	if (!isExistingUser) return { failure: 'Email does not exist', status: 400 }
+	if (!isExistingUser) return { failure: "L'email n'existe pas.", status: 400 }
 
 	const isPasswordValid = await compare(password, isExistingUser.password)
-	if (!isPasswordValid) return { failure: 'Password is incorrect', status: 400 }
+	if (!isPasswordValid) return { failure: 'Mot de passe incorrect.', status: 400 }
 
 	return JSON.parse(JSON.stringify({ status: 200, user: isExistingUser }))
 })
@@ -26,12 +26,12 @@ export const register = actionClient.schema(registerSchema).action(async ({ pars
 
 	if (step == 1) {
 		const isExistingUser = await User.findOne({ email })
-		if (isExistingUser) return { failure: 'Email already exists', status: 400 }
+		if (isExistingUser) return { failure: "L'email existe déjà.", status: 400 }
 		return { status: 200 }
 	} else if (step == 2) {
 		const isExistinUsername = await User.findOne({ username })
 
-		if (isExistinUsername) return { failure: 'Username already exists', status: 400 }
+		if (isExistinUsername) return { failure: "Le nom d'utilisateur existe déjà.", status: 400 }
 
 		const hashedPassword = await hash(password!, 10)
 

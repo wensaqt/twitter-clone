@@ -65,7 +65,7 @@ export const getNotifications = actionClient.schema(paramsSchema).action<ReturnA
 	const { postId } = parsedInput
 	await connectToDatabase()
 	const session = await getServerSession(authOptions)
-	if (!session) return { failure: 'You need to be logged in to view notifications' }
+	if (!session) return { failure: 'Vous devez être connecté pour voir les notifications' }
 	const notifications = await Notification.find({ user: postId }).sort({ createdAt: -1 })
 	await User.findByIdAndUpdate(session.currentUser?._id, { $set: { hasNewNotifications: false } })
 	return JSON.parse(JSON.stringify({ notifications }))
@@ -88,7 +88,7 @@ export const getUserPosts = actionClient.schema(idSchema).action<ReturnActionTyp
 	const { id } = parsedInput
 	await connectToDatabase()
 	const session = await getServerSession(authOptions)
-	if (!session) return { failure: 'You need to be logged in to view posts' }
+	if (!session) return { failure: 'Vous devez être connecté pour voir les posts' }
 	const posts = await Post.find({ user: id })
 		.populate({ path: 'user', model: User, select: 'name email profileImage _id username' })
 		.sort({ createdAt: -1 })
@@ -125,7 +125,7 @@ export const updateUser = actionClient.schema(updateUserSchema).action<ReturnAct
 		if (parsedInput.username !== existUser.username) {
 			const usernameExist = await User.exists({ username: parsedInput.username })
 			if (usernameExist) {
-				return { failure: 'Username already exists', status: 400 }
+				return { failure: "Nom d'utilisateur existe déjà", status: 400 }
 			}
 		}
 		await User.findByIdAndUpdate(id, parsedInput)
@@ -139,10 +139,10 @@ export const follow = actionClient.schema(followsSchema).action<ReturnActionType
 	await connectToDatabase()
 	const { userId, currentUserId } = parsedInput
 	const session = await getServerSession(authOptions)
-	if (!session) return { failure: 'You need to be logged in to follow' }
+	if (!session) return { failure: "Vous devez être connecté pour suivre quelqu'un" }
 	await User.findByIdAndUpdate(userId, { $push: { followers: currentUserId } })
 	await User.findByIdAndUpdate(currentUserId, { $push: { following: userId } })
-	await Notification.create({ user: userId, body: 'Someone followed you!' })
+	await Notification.create({ user: userId, body: "Quelqu'un vous a follow !" })
 	await User.findOneAndUpdate({ _id: userId }, { $set: { hasNewNotifications: true } })
 	revalidatePath(`/profile/${userId}`)
 	return { status: 200 }

@@ -17,7 +17,7 @@ export async function PUT(req: Request) {
 
     await Notification.create({
       user: String(post.user),
-      body: "Someone liked your post!",
+      body: "Quelqu'un a like votre post !",
     });
 
     await User.findOneAndUpdate(

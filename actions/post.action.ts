@@ -56,14 +56,14 @@ export const getPost = actionClient.schema(idSchema).action<ReturnActionType>(as
 	const { id } = parsedInput
 	await connectToDatabase()
 	const post = await Post.findById(id).populate({ path: 'user', model: User, select: 'name email profileImage _id username' })
-	if (!post) return { failure: 'Post not found.' }
+	if (!post) return { failure: 'Post non trouvé.' }
 	return JSON.parse(JSON.stringify({ post }))
 })
 
 export const createPost = actionClient.schema(createPostSchema).action<ReturnActionType>(async ({ parsedInput }) => {
 	const { body } = parsedInput
 	const session = await getServerSession(authOptions)
-	if (!session) return { failure: 'You must be logged in to create a post.' }
+	if (!session) return { failure: 'Vous devez être connecté pour créer un post.' }
 	await Post.create({ body, user: session.currentUser?._id })
 	revalidatePath('/')
 	return { status: 200 }
@@ -72,11 +72,11 @@ export const createPost = actionClient.schema(createPostSchema).action<ReturnAct
 export const likePost = actionClient.schema(idSchema).action<ReturnActionType>(async ({ parsedInput }) => {
 	const { id } = parsedInput
 	const session = await getServerSession(authOptions)
-	if (!session) return { failure: 'You must be logged in to like a post.' }
+	if (!session) return { failure: 'Vous devez être connecté pour liker un post.' }
 	await connectToDatabase()
 	const currentPost = await Post.findById(id)
-	if (!currentPost) return { failure: 'Post not found.' }
-	if (currentPost.likes.includes(session.currentUser?._id)) return { failure: 'You have already liked this post.' }
+	if (!currentPost) return { failure: 'Post non trouvé.' }
+	if (currentPost.likes.includes(session.currentUser?._id)) return { failure: 'Vous avez déjà aimé ce post.' }
 	await Post.findByIdAndUpdate(id, { $push: { likes: session.currentUser?._id } })
 	revalidatePath('/')
 	return { status: 200 }
@@ -85,12 +85,12 @@ export const likePost = actionClient.schema(idSchema).action<ReturnActionType>(a
 export const deletePost = actionClient.schema(idSchema).action<ReturnActionType>(async ({ parsedInput }) => {
 	const { id } = parsedInput
 	const session = await getServerSession(authOptions)
-	if (!session) return { failure: 'You must be logged in to delete a post.' }
+	if (!session) return { failure: 'Vous devez être connecté pour supprimer un post.' }
 	await connectToDatabase()
 	const currentPost = await Post.findById(id)
 	if (!currentPost) return { failure: 'Post not found.' }
 	if (currentPost.user.toString() !== session.currentUser?._id.toString())
-		return { failure: 'You do not have permission to delete this post.' }
+		return { failure: "Vous n'avez pas la permission de supprimer ce post." }
 	await Post.findByIdAndDelete(id)
 	revalidatePath('/')
 	return { status: 200 }
@@ -99,11 +99,11 @@ export const deletePost = actionClient.schema(idSchema).action<ReturnActionType>
 export const deleteLike = actionClient.schema(idSchema).action<ReturnActionType>(async ({ parsedInput }) => {
 	const { id } = parsedInput
 	const session = await getServerSession(authOptions)
-	if (!session) return { failure: 'You must be logged in to delete a like.' }
+	if (!session) return { failure: 'Vous devez être connecté pour supprimer un like.' }
 	await connectToDatabase()
 	const currentPost = await Post.findById(id)
 	if (!currentPost) return { failure: 'Post not found.' }
-	if (!currentPost.likes.includes(session.currentUser?._id)) return { failure: 'You have not liked this post.' }
+	if (!currentPost.likes.includes(session.currentUser?._id)) return { failure: "Vous n'avez pas like ce post." }
 	await Post.findByIdAndUpdate(id, { $pull: { likes: session.currentUser?._id } })
 	revalidatePath('/')
 	return { status: 200 }

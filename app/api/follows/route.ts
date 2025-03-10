@@ -18,12 +18,12 @@ export async function PUT(req: Request) {
 
 		await Notification.create({
 			user: userId,
-			body: 'Someone followed you!',
+			body: "Quelqu'un vous a follow !",
 		})
 
 		await User.findOneAndUpdate({ _id: userId }, { $set: { hasNewNotifications: true } })
 
-		return NextResponse.json({ message: 'Followed' })
+		return NextResponse.json({ message: 'Suivi' })
 	} catch (error) {
 		const result = error as Error
 		return NextResponse.json({ error: result.message }, { status: 400 })
@@ -43,7 +43,7 @@ export async function DELETE(req: Request) {
 			$pull: { following: userId },
 		})
 
-		return NextResponse.json({ message: 'Followed' })
+		return NextResponse.json({ message: 'Suivi' })
 	} catch (error) {
 		const result = error as Error
 		return NextResponse.json({ error: result.message }, { status: 400 })

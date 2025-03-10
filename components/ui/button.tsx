@@ -33,11 +33,11 @@ export default function Button({
 			onClick={onClick}
 			type={type}
 			className={cn(
-				'rounded-full font-semibold border transition hover:opacity-80 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center',
+				'rounded-xl font-semibold border transition hover:opacity-80 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center',
 				fullWidth ? 'w-full' : 'w-fit',
-				secondary ? 'bg-white text-black' : 'bg-sky-500 text-white',
+				secondary ? 'bg-white text-black' : 'bg-orange-500 text-white',
 				large ? 'text-xl px-5 py-3' : 'text-md px-4 py-3',
-				outline ? 'bg-transparent border-slate-600 text-sky-500 hover:bg-slate-800/40' : '',
+				outline ? 'bg-transparent border-slate-600 text-orange-500 hover:bg-slate-800/40' : '',
 				classNames
 			)}
 		>

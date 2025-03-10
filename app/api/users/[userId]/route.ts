@@ -15,19 +15,19 @@ export async function PUT(req: Request, route: { params: { userId: string } }) {
 		if (type === 'updateImage') {
 			await User.findByIdAndUpdate(userId, body, { new: true })
 			revalidatePath(`/profile/${userId}`)
-			return NextResponse.json({ message: 'User updated successfully' })
+			return NextResponse.json({ message: 'Utilisateur mis à jour avec succès' })
 		} else if (type === 'updateFields') {
 			const existUser = await User.findById(userId)
 
 			if (body.username !== existUser.username) {
 				const usernameExist = await User.exists({ username: body.username })
 				if (usernameExist) {
-					return NextResponse.json({ error: 'Username already exists' }, { status: 400 })
+					return NextResponse.json({ error: "Nom d'utilisateur existe déjà" }, { status: 400 })
 				}
 			}
 			await User.findByIdAndUpdate(userId, body, { new: true })
 			revalidatePath(`/profile/${userId}`)
-			return NextResponse.json({ message: 'User updated successfully' })
+			return NextResponse.json({ message: "Utilisateur mis à jour avec succès" })
 		}
 	} catch (error) {
 		const result = error as Error

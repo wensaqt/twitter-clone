@@ -27,7 +27,7 @@ const Page: FC<Props> = async ({ searchParams }) => {
 			<SearchInput />
 
 			<>
-				{users && users.length === 0 && <div className='text-neutral-600 text-center p-6 text-xl'>No users found</div>}
+				{users && users.length === 0 && <div className='text-neutral-600 text-center p-6 text-xl'>Aucun utilisateur trouvé</div>}
 				<div className='grid grid-cols-1 lg:grid-cols-2 mt-6'>
 					{users &&
 						users.map(user => (

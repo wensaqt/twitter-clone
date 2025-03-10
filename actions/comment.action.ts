@@ -53,12 +53,12 @@ export const createComment = actionClient.schema(createCommentSchema).action<Ret
 	const { body, id } = parsedInput
 	await connectToDatabase()
 	const session = await getServerSession(authOptions)
-	if (!session) return { failure: 'You must be logged in to create a comment.' }
+	if (!session) return { failure: 'Vous devez être connecté pour envoyer un commentaire.' }
 	const comment = await Comment.create({ body, post: id, user: session.currentUser?._id })
 	const post = await Post.findByIdAndUpdate(id, { $push: { comments: comment._id } })
 	await Notification.create({
 		user: String(post.user),
-		body: `${session.currentUser?.name} replied on your post!`,
+		body: `${session.currentUser?.name} a répondu à votre post!`,
 	})
 	await User.findOneAndUpdate({ _id: String(post.user) }, { $set: { hasNewNotifications: true } })
 	revalidatePath(`/posts/${id}`)
@@ -69,11 +69,11 @@ export const likeComment = actionClient.schema(idSchema).action<ReturnActionType
 	const { id } = parsedInput
 	await connectToDatabase()
 	const session = await getServerSession(authOptions)
-	if (!session) return { failure: 'You must be logged in to like a comment.' }
+	if (!session) return { failure: 'Vous devez être connecté pour like un commentaire.' }
 	const comment = await Comment.findByIdAndUpdate(id, { $push: { likes: session.currentUser?._id } })
 	await Notification.create({
 		user: String(comment.user),
-		body: `${session.currentUser?.name} liked on your replied post!`,
+		body: `${session.currentUser?.name} a aimé votre réponse a ce post !`,
 	})
 	await User.findOneAndUpdate({ _id: String(comment.user) }, { $set: { hasNewNotifications: true } })
 	revalidatePath(`/posts/${comment.post}`)
@@ -84,11 +84,11 @@ export const unlikeComment = actionClient.schema(idSchema).action<ReturnActionTy
 	const { id } = parsedInput
 	await connectToDatabase()
 	const session = await getServerSession(authOptions)
-	if (!session) return { failure: 'You must be logged in to unlike a comment.' }
+	if (!session) return { failure: 'Vous devez être connecté pour dislike un commentaire.' }
 	const comment = await Comment.findByIdAndUpdate(id, { $pull: { likes: session.currentUser?._id } })
 	await Notification.create({
 		user: String(comment.user),
-		body: `${session.currentUser?.name} unliked on your replied post!`,
+		body: `${session.currentUser?.name} a enlevé son like a votre réponse de post !`,
 	})
 	await User.findOneAndUpdate({ _id: String(comment.user) }, { $set: { hasNewNotifications: true } })
 	revalidatePath(`/posts/${comment.post}`)
@@ -99,7 +99,7 @@ export const deleteComment = actionClient.schema(idSchema).action<ReturnActionTy
 	const { id } = parsedInput
 	await connectToDatabase()
 	const session = await getServerSession(authOptions)
-	if (!session) return { failure: 'You must be logged in to delete a comment.' }
+	if (!session) return { failure: 'Vous devez être connecté pour supprimer un commentaire.' }
 	const comment = await Comment.findByIdAndDelete(id)
 	await Post.findByIdAndUpdate(comment.post, { $pull: { comments: comment._id } })
 	revalidatePath(`/posts/${comment.post}`)

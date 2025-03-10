@@ -23,12 +23,12 @@ const Page = async ({ params }: { params: { userId: string } }) => {
 				{notifications && notifications.length > 0 ? (
 					notifications.map((notification: IPost) => (
 						<div className='flex flex-row items-center p-6 gap-4 border-b-[1px] border-neutral-800' key={notification._id}>
-							<Image alt='logo' src={'/images/x.svg'} width={32} height={32} />
+							<Image alt='logo' src={'/images/y.svg'} width={32} height={32} />
 							<p className='text-white'>{notification.body}</p>
 						</div>
 					))
 				) : (
-					<div className='text-neutral-600 text-center p-6 text-xl'>No notifications</div>
+					<div className='text-neutral-600 text-center p-6 text-xl'>Pas de notification</div>
 				)}
 			</div>
 		</>

@@ -56,7 +56,7 @@ const Page = async ({ params, searchParams }: Props) => {
 					</div>
 				</div>
 
-				<Form placeholder='Post your reply?' user={user} isComment />
+				<Form placeholder='Poster une réponse ?' user={user} isComment />
 
 				{comments && comments.map(comment => <CommentItem comment={comment} key={comment._id} user={user} />)}
 				<Pagination isNext={isNext} pageNumber={searchParams?.page ? +searchParams.page : 1} />

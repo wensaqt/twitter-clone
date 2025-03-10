@@ -38,7 +38,7 @@ export async function DELETE(req: Request, route: { params: { userId: string } }
 			{ new: true }
 		)
 
-		return NextResponse.json({ message: 'Notifications deleted' })
+		return NextResponse.json({ message: 'Notifications supprimées' })
 	} catch (error) {
 		const result = error as Error
 		return NextResponse.json({ error: result.message }, { status: 400 })

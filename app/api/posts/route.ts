@@ -68,7 +68,7 @@ export async function DELETE(req: Request) {
 
 		await Post.findByIdAndDelete(postId)
 
-		return NextResponse.json({ message: 'Post deleted successfully' })
+		return NextResponse.json({ message: 'Post supprimé avec succès' })
 	} catch (error) {
 		const result = error as Error
 		return NextResponse.json({ error: result.message }, { status: 400 })

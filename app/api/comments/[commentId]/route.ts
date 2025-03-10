@@ -12,7 +12,7 @@ export async function DELETE(
 
     await Comment.findByIdAndDelete(commentId);
 
-    return NextResponse.json({ message: "Comment deleted" });
+    return NextResponse.json({ message: "Commentaire supprimé" });
   } catch (error) {
     const result = error as Error;
     return NextResponse.json({ error: result.message }, { status: 400 });
