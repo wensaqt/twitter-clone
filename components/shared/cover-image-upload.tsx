@@ -66,7 +66,7 @@ const CoverImageUpload = ({ coverImage, onChange }: Props) => {
       ) : (
         <div className="h-full flex justify-center cursor-pointer flex-col items-center gap-2">
           <IoIosCloudDownload size={50} />
-          <p>Upload cover image</p>
+          <p>Charger une image de couverture</p>
         </div>
       )}
     </div>

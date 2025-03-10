@@ -65,7 +65,7 @@ const CommentItem = ({ comment, user }: Props) => {
 			{isLoading && (
 				<div className='absolute inset-0 w-full h-full bg-black opacity-50'>
 					<div className='flex justify-center items-center h-full'>
-						<Loader2 className='animate-spin text-sky-500' />
+						<Loader2 className='animate-spin text-orange-500' />
 					</div>
 				</div>
 			)}

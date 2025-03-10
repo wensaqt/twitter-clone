@@ -23,7 +23,7 @@ const Page: FC<Props> = async ({ searchParams }) => {
 
 	return (
 		<>
-			<Header label='Explore' />
+			<Header label='Explorer' />
 			<SearchInput />
 
 			<>

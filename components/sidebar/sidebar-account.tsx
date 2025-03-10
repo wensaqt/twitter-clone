@@ -18,7 +18,7 @@ const SidebarAccount = ({ user }: Props) => {
 	if (status == 'loading')
 		return (
 			<div className='flex items-center justify-center'>
-				<Loader2 className='animate-spin text-sky-500' />
+				<Loader2 className='animate-spin text-orange-500' />
 			</div>
 		)
 
@@ -60,7 +60,7 @@ const SidebarAccount = ({ user }: Props) => {
 						className='font-bold text-white cursor-pointer hover:bg-slate-300 hover:bg-opacity-10 p-4 transition'
 						onClick={() => signOut()}
 					>
-						Log out {data?.currentUser?.username ? `@${data?.currentUser?.username}` : data?.currentUser?.name}
+						Déconnecter {data?.currentUser?.username ? `@${data?.currentUser?.username}` : data?.currentUser?.name}
 					</div>
 				</PopoverContent>
 			</Popover>

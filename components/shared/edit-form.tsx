@@ -30,7 +30,7 @@ const EditForm = ({ user }: Props) => {
 		setIsLoading(true)
 		const res = await updateUser({ id: user._id, type: 'updateFields', ...values })
 		if (res?.serverError || res?.validationErrors || !res?.data) {
-			return onError('Something went wrong')
+			return onError('Quelque chose s\'est mal passé')
 		}
 		if (res.data.failure) {
 			return onError(res.data.failure)
@@ -50,7 +50,7 @@ const EditForm = ({ user }: Props) => {
 					render={({ field }) => (
 						<FormItem>
 							<FormControl>
-								<Input placeholder='Name' disabled={isLoading} {...field} />
+								<Input placeholder='Nom' disabled={isLoading} {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -63,7 +63,7 @@ const EditForm = ({ user }: Props) => {
 					render={({ field }) => (
 						<FormItem>
 							<FormControl>
-								<Input placeholder='Username' disabled={isLoading} {...field} />
+								<Input placeholder="Nom d'utilisateur" disabled={isLoading} {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -76,7 +76,7 @@ const EditForm = ({ user }: Props) => {
 					render={({ field }) => (
 						<FormItem>
 							<FormControl>
-								<Input placeholder='Location' disabled={isLoading} {...field} />
+								<Input placeholder='Localisation' disabled={isLoading} {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -96,7 +96,7 @@ const EditForm = ({ user }: Props) => {
 					)}
 				/>
 
-				<Button type='submit' label={'Save'} secondary large fullWidth disabled={isLoading} isLoading={isLoading} />
+				<Button type='submit' label={'Modifier'} secondary large fullWidth disabled={isLoading} isLoading={isLoading} />
 			</form>
 		</Form>
 	)

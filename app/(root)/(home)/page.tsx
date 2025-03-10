@@ -23,7 +23,7 @@ export default async function Page({ searchParams }: Props) {
 
 	return (
 		<>
-			<Header label='Home' />
+			<Header label='Accueil' />
 			<Form placeholder="A quoi pensez-vous ?" user={user} />
 			{posts && posts.map(post => <PostItem key={post._id} post={post} user={user} />)}
 			<Pagination isNext={isNext} pageNumber={searchParams?.page ? +searchParams.page : 1} />

@@ -51,7 +51,7 @@ const FollowUser = ({ user, setFollowing }: Props) => {
 		setIsLoading(true)
 		const res = await unfollow({ userId: user._id, currentUserId: session?.currentUser?._id! })
 		if (res?.serverError || res?.validationErrors || !res?.data) {
-			return onError('Something went wrong')
+			return onError('Quelque chose s\'est mal passé')
 		}
 		if (res.data.failure) {
 			return onError(res.data.failure)
@@ -92,14 +92,14 @@ const FollowUser = ({ user, setFollowing }: Props) => {
 			{profile._id !== session?.currentUser?._id ? (
 				profile.followers.includes(session?.currentUser?._id!) ? (
 					<Button
-						label={'Unfollow'}
+						label={'Ne plus suivre'}
 						outline
 						classNames='h-[30px] p-0 w-fit px-3 text-sm'
 						disabled={isLoading}
 						onClick={onUnfollow}
 					/>
 				) : (
-					<Button label={'Follow'} classNames='h-[30px] p-0 w-fit px-3 text-sm' disabled={isLoading} onClick={onFollow} />
+					<Button label={'Suivre'} classNames='h-[30px] p-0 w-fit px-3 text-sm' disabled={isLoading} onClick={onFollow} />
 				)
 			) : null}
 		</div>

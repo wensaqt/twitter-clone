@@ -34,7 +34,7 @@ const PostItem = ({ post, user }: Props) => {
 			return onError(res.data.failure)
 		}
 		if (res.data.status === 200) {
-			toast({ title: 'Success', description: 'Tweet deleted successfully' })
+			toast({ title: 'Success', description: 'Tweet supprimé avec succès' })
 			setIsLoading(false)
 		}
 	}
@@ -73,7 +73,7 @@ const PostItem = ({ post, user }: Props) => {
 			{isLoading && (
 				<div className='absolute inset-0 w-full h-full bg-black opacity-50'>
 					<div className='flex justify-center items-center h-full'>
-						<Loader2 className='animate-spin text-sky-500' />
+						<Loader2 className='animate-spin text-orange-500' />
 					</div>
 				</div>
 			)}
@@ -89,13 +89,13 @@ const PostItem = ({ post, user }: Props) => {
 						<span className='text-neutral-500 cursor-pointer hover:underline hidden md:block'>
 							{post.user.username ? `@${sliceText(post.user.username, 16)}` : sliceText(post.user.email, 16)}
 						</span>
-						<span className='text-neutral-500 text-sm'>{formatDistanceToNowStrict(new Date(post.createdAt))} ago</span>
+						<span className='text-neutral-500 text-sm'>{formatDistanceToNowStrict(new Date(post.createdAt))}</span>
 					</div>
 
 					<div className='text-white mt-1'>{post.body}</div>
 
 					<div className='flex flex-row items-center mt-3 gap-10'>
-						<div className='flex flex-row items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-sky-500'>
+						<div className='flex flex-row items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-orange-500'>
 							<AiOutlineMessage size={20} />
 							<p>{post.comments || 0}</p>
 						</div>

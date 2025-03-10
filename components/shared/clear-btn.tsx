@@ -14,20 +14,20 @@ const ClearBtn = () => {
 		setIsLoading(true)
 		const res = await deleteNotifications({ id: data?.currentUser?._id! })
 		if (res?.serverError || res?.validationErrors || !res?.data) {
-			return onError('Something went wrong')
+			return onError('Quelque chose s\'est mal passé')
 		}
 		if (res.data.failure) {
 			return onError(res.data.failure)
 		}
 		if (res.data.status === 200) {
-			toast({ title: 'Success', description: 'Notifications cleared' })
+			toast({ title: 'Success', description: 'Notifications nettoyée' })
 			setIsLoading(false)
 		}
 	}
 
 	return (
 		<div className='mt-4 flex justify-center'>
-			<Button outline label={'Clear all'} onClick={onClear} disabled={isLoading} isLoading={isLoading} />
+			<Button outline label={'Tout supprimer'} onClick={onClear} disabled={isLoading} isLoading={isLoading} />
 		</div>
 	)
 }

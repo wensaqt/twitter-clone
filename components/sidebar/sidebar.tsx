@@ -11,10 +11,10 @@ import { Search } from 'lucide-react'
 
 const Sidebar = ({ user }: { user: IUser }) => {
 	const sidebarItems = [
-		{ label: 'Home', path: '/', icon: Home },
+		{ label: 'Accueil', path: '/', icon: Home },
 		{ label: 'Notifications', path: `/notifications/${user?._id}`, icon: Bell, notification: user?.hasNewNotifications },
-		{ label: 'Profile', path: `/profile/${user?._id}`, icon: User },
-		{ label: 'Explore', path: '/explore', icon: Search },
+		{ label: 'Profil', path: `/profile/${user?._id}`, icon: User },
+		{ label: 'Explorer', path: '/explore', icon: Search },
 	]
 
 	return (

@@ -6,7 +6,7 @@ const Loading = () => {
 		<>
 			<Header isBack label='Notifications' />
 			<div className='flex justify-center items-center h-24'>
-				<Loader2 className='animate-spin text-sky-500' />
+				<Loader2 className='animate-spin text-orange-500' />
 			</div>
 		</>
 	)

@@ -37,7 +37,7 @@ const Form = ({ placeholder, user, isComment }: Props) => {
 			return onError(res.data.failure)
 		}
 		if (res.data.status === 200) {
-			toast({ title: 'Success', description: 'Tweet created successfully' })
+			toast({ title: 'Success', description: 'Tweet créé avec succèes' })
 			setBody('')
 		}
 		setIsLoading(false)
@@ -64,7 +64,7 @@ const Form = ({ placeholder, user, isComment }: Props) => {
 
 					<div className='mt-4 flex flex-row justify-end'>
 						<Button
-							label={isComment ? 'Reply' : 'Post'}
+							label={isComment ? 'Répondre' : 'Poster'}
 							classNames='px-8'
 							disabled={isLoading || !body}
 							onClick={onSubmit}
