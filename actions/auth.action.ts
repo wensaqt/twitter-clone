@@ -1,6 +1,6 @@
 'use server'
 
-import { compare, hash } from 'bcrypt'
+import { compare, hash } from 'bcryptjs'
 import User from '@/database/user.model'
 import { connectToDatabase } from '@/lib/mognoose'
 import { actionClient } from '@/lib/safe-action'
