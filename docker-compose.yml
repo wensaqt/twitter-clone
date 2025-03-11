@@ -1,0 +1,32 @@
+services:
+  y:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+
+    networks:
+      - twitter_bridge
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - twitter_bridge
+
+volumes:
+  mongo-data:
+
+networks:
+  twitter_bridge:
+    driver: bridge
