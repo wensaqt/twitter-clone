@@ -3,10 +3,13 @@ import ClearBtn from '@/components/shared/clear-btn'
 import Header from '@/components/shared/header'
 import { IPost } from '@/types'
 import Image from 'next/image'
+import dynamic from 'next/dynamic'
+
+// Import dynamique du composant client avec l'animation Lottie
+const NoNotifications = dynamic(() => import('./no-notifications'), { ssr: false })
 
 const Page = async ({ params }: { params: { userId: string } }) => {
 	const res = await getNotifications({ postId: params.userId })
-
 	const notifications = res?.data?.notifications
 
 	return (
@@ -22,13 +25,16 @@ const Page = async ({ params }: { params: { userId: string } }) => {
 			<div className='flex flex-col'>
 				{notifications && notifications.length > 0 ? (
 					notifications.map((notification: IPost) => (
-						<div className='flex flex-row items-center p-6 gap-4 border-b-[1px] border-neutral-800' key={notification._id}>
+						<div 
+							className='flex flex-row items-center p-6 gap-4 border-b-[1px] border-neutral-800 hover:bg-neutral-900/30 transition-colors' 
+							key={notification._id}
+						>
 							<Image alt='logo' src={'/images/y.svg'} width={32} height={32} />
 							<p className='text-white'>{notification.body}</p>
 						</div>
 					))
 				) : (
-					<div className='text-neutral-600 text-center p-6 text-xl'>Pas de notification</div>
+					<NoNotifications />
 				)}
 			</div>
 		</>
