@@ -2,7 +2,7 @@
 
 import { IUser } from '@/types'
 import Image from 'next/image'
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { useRive, useStateMachineInput } from '@rive-app/react-canvas'
 import { useInView } from 'react-intersection-observer';
@@ -27,7 +27,7 @@ const ProfileHero = ({ user }: { user: IUser }) => {
 	const isSadInput = useStateMachineInput(rive, 'avatar', 'isSad');
 	
 	useEffect(() => {
-		if (rive && rive.renderer) {
+		if (rive) {
 			if (inView) {
 				rive.play();
 			} else {
@@ -72,10 +72,8 @@ const ProfileHero = ({ user }: { user: IUser }) => {
 							<AvatarFallback className='text-7xl'>{user.name[0]}</AvatarFallback>
 						</Avatar>
 					) : (
-						<RiveComponent 
-							className='w-full h-full' 
-							rendererType="webgl"
-							fitCanvasToArtboardHeight={true}
+						<RiveComponent
+							 className='w-full h-full'
 						/>
 					)}
 				</div>
