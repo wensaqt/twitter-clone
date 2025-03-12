@@ -26,12 +26,24 @@ const SidebarAccount = ({ user }: Props) => {
 		<>
 			{/* MOBIE SIDEBAR ACCOUNT */}
 			<div className='lg:hidden block'>
-				<div
-					className='mt-6 lg:hidden rounded-full h-14 w-14 p-4 flex items-center justify-center bg-red-500 hover:bg-opacity-80 transition cursor-pointer'
-					onClick={() => signOut()}
+			<div
+				className="
+					mt-6 lg:hidden 
+					rounded-full 
+					h-12 w-12 
+					flex items-center justify-center
+					bg-orange-500
+					hover:bg-orange-600
+					transition
+					cursor-pointer
+					focus:outline-none focus:ring-2 focus:ring-orange-600
+					active:scale-95
+				"
+				onClick={() => signOut()}
 				>
-					<RiLogoutCircleLine size={24} color='white' />
+				<RiLogoutCircleLine size={20} color="white" />
 				</div>
+
 			</div>
 
 			{/* DESKTOP SIDEBAR ACCOUNT */}
@@ -55,14 +67,40 @@ const SidebarAccount = ({ user }: Props) => {
 						<MoreHorizontal size={24} color='white' />
 					</div>
 				</PopoverTrigger>
-				<PopoverContent className='bg-black border-none rounded-2xl shadow shadow-white px-0 mb-3'>
-					<div
-						className='font-bold text-white cursor-pointer hover:bg-slate-300 hover:bg-opacity-10 p-4 transition'
-						onClick={() => signOut()}
-					>
-						Déconnecter {data?.currentUser?.username ? `@${data?.currentUser?.username}` : data?.currentUser?.name}
-					</div>
-				</PopoverContent>
+				<PopoverContent
+				className="
+					bg-[#1c1c1c]
+					border border-slate-700
+					rounded-lg
+					shadow-md shadow-black
+					p-2
+					animate-in data-[side=top]:slide-in-from-top-2
+					data-[side=bottom]:slide-in-from-bottom-2
+				"
+				>
+				<div
+					className="
+					flex items-center gap-2
+					p-2
+					text-sm font-medium 
+					text-white
+					cursor-pointer
+					hover:bg-slate-300 hover:bg-opacity-10 
+					rounded-md
+					transition
+					"
+					onClick={() => signOut()}
+				>
+					<RiLogoutCircleLine size={16} />
+					<span>
+					Déconnecter&nbsp;
+					{data?.currentUser?.username
+						? `@${data?.currentUser?.username}`
+						: data?.currentUser?.name}
+					</span>
+				</div>
+			</PopoverContent>
+
 			</Popover>
 		</>
 	)
