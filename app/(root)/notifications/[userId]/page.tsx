@@ -15,7 +15,7 @@ const Page = async ({ params }: { params: { userId: string } }) => {
 
 	return (
 		<div className="max-w-screen-md mx-auto">
-			<div className='flex items-center justify-between mb-4'>
+			<div className='flex items-center justify-between border-b-[1px] border-neutral-800'>
 				<Header isBack label='Notifications' />
 				{notifications && notifications?.length > 0 && (
 					<div className='w-1/4'>

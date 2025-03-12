@@ -10,6 +10,7 @@ import { ReturnActionType } from '@/types'
 import { FilterQuery } from 'mongoose'
 import { getServerSession } from 'next-auth'
 import { revalidatePath } from 'next/cache'
+import Notification from '@/database/notification.model'
 
 export const getPosts = actionClient.schema(paramsSchema).action<ReturnActionType>(async ({ parsedInput }) => {
 	const { page, pageSize } = parsedInput
@@ -78,6 +79,9 @@ export const likePost = actionClient.schema(idSchema).action<ReturnActionType>(a
 	if (!currentPost) return { failure: 'Post non trouvé.' }
 	if (currentPost.likes.includes(session.currentUser?._id)) return { failure: 'Vous avez déjà aimé ce post.' }
 	await Post.findByIdAndUpdate(id, { $push: { likes: session.currentUser?._id } })
+	const userFollowed = await User.findById(session.currentUser?._id).select('username')
+	await Notification.create({ user: currentPost.user, body: `@${userFollowed.username} a liké votre post !`, link: id, type:'posts' })
+	await User.findOneAndUpdate({ _id: currentPost.user }, { $set: { hasNewNotifications: true } })
 	revalidatePath('/')
 	return { status: 200 }
 })

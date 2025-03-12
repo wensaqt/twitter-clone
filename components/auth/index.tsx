@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import Image from "next/image";
 import React, { useCallback } from "react";
@@ -24,7 +24,9 @@ export default function Auth() {
     <>
       <RegisterModal />
       <LoginModal />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center h-screen">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center h-screen relative">
+        <div className="hidden md:block absolute left-1/2 top-1/2 h-[70%] w-px bg-white/20 transform -translate-x-1/2 -translate-y-1/2"></div>
+        
         <Image
           src={"/images/y.svg"}
           alt="X"
@@ -45,6 +47,7 @@ export default function Auth() {
                 label={"Créer un compte"}
                 fullWidth
                 onClick={onOpenRegisterModal}
+                classNames="bg-orange-500 hover:bg-orange-600 transition-colors duration-300"
               />
               <div className="text-[10px] text-gray-400">
                 En vous inscrivant, vous acceptez les{" "}
@@ -68,6 +71,7 @@ export default function Auth() {
                   fullWidth
                   outline
                   onClick={onOpenLoginModal}
+                  classNames="border-orange-500 text-orange-500 hover:bg-orange-500/10 transition-colors duration-300"
                 />
               </div>
             </div>

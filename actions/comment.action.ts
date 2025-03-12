@@ -58,7 +58,9 @@ export const createComment = actionClient.schema(createCommentSchema).action<Ret
 	const post = await Post.findByIdAndUpdate(id, { $push: { comments: comment._id } })
 	await Notification.create({
 		user: String(post.user),
-		body: `${session.currentUser?.name} a répondu à votre post!`,
+		body: `@${session.currentUser?.name} a répondu à votre post!`,
+		link: post.id,
+		type: 'posts',
 	})
 	await User.findOneAndUpdate({ _id: String(post.user) }, { $set: { hasNewNotifications: true } })
 	revalidatePath(`/posts/${id}`)
