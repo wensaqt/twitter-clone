@@ -12,6 +12,7 @@ import { Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import useAction from '@/hooks/use-action'
 import { deleteLike, deletePost, likePost } from '@/actions/post.action'
+import CameraButton from './camera-button'
 
 interface Props {
 	post: IPost
@@ -20,7 +21,7 @@ interface Props {
 
 const PostItem = ({ post, user }: Props) => {
 	const { isLoading, setIsLoading, onError } = useAction()
-
+	const [reaction, setReaction] = useState<string | null>(null);
 	const router = useRouter()
 
 	const onDelete = async (e: MouseEvent<HTMLDivElement>) => {
@@ -93,6 +94,13 @@ const PostItem = ({ post, user }: Props) => {
 					</div>
 
 					<div className='text-white mt-1'>{post.body}</div>
+					
+					{reaction && (
+						<div className="mt-2 bg-neutral-800/30 p-2 rounded-md">
+							<p className="text-xs text-neutral-400 mb-1">Ma réaction :</p>
+							<img src={reaction} alt="Réaction" className="max-h-32 rounded object-contain" />
+						</div>
+					)}
 
 					<div className='flex flex-row items-center mt-3 gap-10'>
 						<div className='flex flex-row items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-orange-500'>
@@ -108,6 +116,10 @@ const PostItem = ({ post, user }: Props) => {
 							<FaHeart size={20} color={post.hasLiked ? 'red' : ''} />
 							<p>{post.likes || 0}</p>
 						</div>
+
+						<CameraButton onClick={(e) => {
+							e.stopPropagation();
+						}} />
 
 						{post.user._id === user._id && (
 							<div
