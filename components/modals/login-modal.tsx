@@ -12,7 +12,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { loginSchema } from '@/lib/validation'
 import useRegisterModal from '@/hooks/useRegisterModal'
 import { AlertCircle } from 'lucide-react'
-import { Alert, AlertTitle, AlertDescription } from '../ui/alert'
+import { Alert, AlertDescription } from '../ui/alert'
 import { signIn } from 'next-auth/react'
 import useAction from '@/hooks/use-action'
 import { login } from '@/actions/auth.action'
@@ -23,8 +23,7 @@ const LottieAnimation = dynamic(() => import('lottie-react'), { ssr: false });
 export default function LoginModal() {
 	const { isLoading, onError, setIsLoading } = useAction()
 	const [error, setError] = useState('')
-	const [animationData, setAnimationData] = useState(null)
-
+	const [animationData, setAnimationData] = useState<any>(null);
 	const loginModal = useLoginModal()
 	const registerModal = useRegisterModal()
 
@@ -64,10 +63,10 @@ export default function LoginModal() {
 
 	const bodyContent = (
 		<div className="flex flex-col md:flex-row w-full">
-			
+
 			<div className="w-full md:w-1/2 md:border-r md:border-neutral-800/30 px-6 py-4">
 				<h2 className="text-xl font-medium text-white mb-6">Connexion</h2>
-				
+
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
 						{error && (
@@ -76,62 +75,62 @@ export default function LoginModal() {
 								<AlertDescription className="ml-2">{error}</AlertDescription>
 							</Alert>
 						)}
-						
+
 						<FormField
 							control={form.control}
 							name='email'
 							render={({ field }) => (
 								<FormItem>
 									<FormControl>
-										<Input 
-											placeholder='Email' 
-											disabled={isLoading} 
-											{...field} 
-											className="border-neutral-800/50 focus:border-orange-500/50 h-10 text-sm bg-transparent rounded-md px-3" 
+										<Input
+											placeholder='Email'
+											disabled={isLoading}
+											{...field}
+											className="border-neutral-800/50 focus:border-orange-500/50 h-10 text-sm bg-transparent rounded-md px-3"
 										/>
 									</FormControl>
 									<FormMessage className="text-red-400 text-xs mt-1" />
 								</FormItem>
 							)}
 						/>
-						
+
 						<FormField
 							control={form.control}
 							name='password'
 							render={({ field }) => (
 								<FormItem>
 									<FormControl>
-										<Input 
-											placeholder='Mot de passe' 
-											disabled={isLoading} 
-											type='password' 
-											{...field} 
-											className="border-neutral-800/50 focus:border-orange-500/50 h-10 text-sm bg-transparent rounded-md px-3" 
+										<Input
+											placeholder='Mot de passe'
+											disabled={isLoading}
+											type='password'
+											{...field}
+											className="border-neutral-800/50 focus:border-orange-500/50 h-10 text-sm bg-transparent rounded-md px-3"
 										/>
 									</FormControl>
 									<FormMessage className="text-red-400 text-xs mt-1" />
 								</FormItem>
 							)}
 						/>
-						
-						<Button 
-							label={'Se connecter'} 
-							type='submit' 
-							fullWidth 
-							disabled={isLoading} 
-							isLoading={isLoading} 
-							className="bg-orange-500 hover:bg-orange-600 text-white font-normal text-sm rounded-md h-10 mt-2"
+
+						<Button
+							label={'Se connecter'}
+							type='submit'
+							fullWidth
+							disabled={isLoading}
+							isLoading={isLoading}
+							classNames="bg-orange-500 hover:bg-orange-600 text-white font-normal text-sm rounded-md h-10 mt-2"
 						/>
 					</form>
 				</Form>
 			</div>
-			
-			
+
+
 			<div className="hidden md:flex md:w-1/2 items-center justify-center">
 				{animationData && (
-					<LottieAnimation 
-						animationData={animationData} 
-						loop={true} 
+					<LottieAnimation
+						animationData={animationData}
+						loop={true}
 						autoplay={true}
 						style={{ width: '100%', height: '100%' }}
 					/>
@@ -152,12 +151,14 @@ export default function LoginModal() {
 	)
 
 	return (
-		<Modal 
-			isOpen={loginModal.isOpen} 
-			onClose={loginModal.onClose} 
-			body={bodyContent} 
-			footer={footer}
-			className="max-w-3xl border border-neutral-800/30 bg-neutral-900 rounded-lg shadow-xl"
-		/>
+		<div className="max-w-3xl border border-neutral-800/30 bg-neutral-900 rounded-lg shadow-xl"
+		>
+			<Modal
+				isOpen={loginModal.isOpen}
+				onClose={loginModal.onClose}
+				body={bodyContent}
+				footer={footer}
+			/>
+		</div>
 	)
 }

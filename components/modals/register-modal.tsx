@@ -23,7 +23,7 @@ const LottieAnimation = dynamic(() => import('lottie-react'), { ssr: false });
 export default function RegisterModal() {
 	const [step, setStep] = useState(1)
 	const [data, setData] = useState({ name: '', email: '' })
-	const [animationData, setAnimationData] = useState(null)
+	const [animationData, setAnimationData] = useState<any>(null)
 
 	const registerModal = useRegisterModal()
 	const loginModal = useLoginModal()
@@ -77,15 +77,17 @@ export default function RegisterModal() {
 	)
 
 	return (
-		<Modal
-			body={bodyContent}
-			footer={footer}
-			isOpen={registerModal.isOpen}
-			onClose={registerModal.onClose}
-			step={step}
-			totalSteps={2}
-			className="max-w-3xl border border-neutral-800/30 bg-neutral-900 rounded-lg shadow-xl"
-		/>
+		<div className="max-w-3xl border border-neutral-800/30 bg-neutral-900 rounded-lg shadow-xl"
+		>
+			<Modal
+				body={bodyContent}
+				footer={footer}
+				isOpen={registerModal.isOpen}
+				onClose={registerModal.onClose}
+				step={step}
+				totalSteps={2}
+			/>
+		</div>
 	)
 }
 
