@@ -142,7 +142,8 @@ export const follow = actionClient.schema(followsSchema).action<ReturnActionType
 	if (!session) return { failure: "Vous devez être connecté pour suivre quelqu'un" }
 	await User.findByIdAndUpdate(userId, { $push: { followers: currentUserId } })
 	await User.findByIdAndUpdate(currentUserId, { $push: { following: userId } })
-	await Notification.create({ user: userId, body: "Quelqu'un vous a follow !" })
+	const userFollowed = await User.findById(currentUserId).select('username')
+	await Notification.create({ user: userId, body: `@${userFollowed.username} vous a follow !`, link: currentUserId, type: 'profile' })
 	await User.findOneAndUpdate({ _id: userId }, { $set: { hasNewNotifications: true } })
 	revalidatePath(`/profile/${userId}`)
 	return { status: 200 }

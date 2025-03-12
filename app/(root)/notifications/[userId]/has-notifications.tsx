@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import Lottie from 'lottie-react'
 import Image from 'next/image'
 import hasNotifAnimation from '../../../../public/lotties/has_notif.json'
+import Link from "next/link";
 
 interface HasNotificationsProps {
   notifications: any[]
@@ -42,16 +43,18 @@ const HasNotifications = ({ notifications }: HasNotificationsProps) => {
   return (
     <>
       {notifications.map((notification: any) => (
-        <div 
-          className='flex flex-row items-center p-6 gap-4 border-b-[1px] border-neutral-800 hover:bg-neutral-900/30 transition-colors' 
-          key={notification._id}
-        >
-          <div className="relative">
-            <Image alt='logo' src={'/images/y.svg'} width={32} height={32} />
-            <div className="absolute -top-1 -right-1 h-3 w-3 bg-orange-500 rounded-full animate-pulse"></div>
-          </div>
-          <p className='text-white'>{notification.body}</p>
-        </div>
+          <Link key={notification._id}
+                href={`/${notification.type}/${notification.link}`}>
+            <div
+                className='flex flex-row items-center p-6 gap-4 border-b-[1px] border-neutral-800 hover:bg-neutral-900/30 transition-colors'
+            >
+              <div className="relative">
+                <Image alt='logo' src={'/images/y.svg'} width={32} height={32}/>
+                <div className="absolute -top-1 -right-1 h-3 w-3 bg-orange-500 rounded-full animate-pulse"></div>
+              </div>
+              <p className='text-white'>{notification.body}</p>
+            </div>
+          </Link>
       ))}
     </>
   )

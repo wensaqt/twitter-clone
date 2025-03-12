@@ -7,8 +7,10 @@ const NotificationSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+    link: String,
+    type: String
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const Notification =

@@ -16,9 +16,11 @@ export async function PUT(req: Request) {
 			$push: { following: userId },
 		})
 
+		const userFollowed = await User.findById(currentUserId).select('username')
+
 		await Notification.create({
 			user: userId,
-			body: "Quelqu'un vous a follow !",
+			body: `${userFollowed.username} vous a follow !`,
 		})
 
 		await User.findOneAndUpdate({ _id: userId }, { $set: { hasNewNotifications: true } })
