@@ -1,6 +1,6 @@
 import User from "@/database/user.model";
 import { connectToDatabase } from "@/lib/mognoose";
-import { compare } from "bcrypt";
+import { compare } from "bcryptjs";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
