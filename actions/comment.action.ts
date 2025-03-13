@@ -88,7 +88,9 @@ export const likeComment = actionClient.schema(idSchema).action<ReturnActionType
 	const comment = await Comment.findByIdAndUpdate(id, { $push: { likes: session.currentUser?._id } })
 	await Notification.create({
 		user: String(comment.user),
-		body: `${session.currentUser?.name} a aimé votre réponse a ce post !`,
+		body: `@${session.currentUser?.name} a aimé votre réponse a ce post !`,
+		link: comment.post,
+		type: 'posts',
 	})
 	await User.findOneAndUpdate({ _id: String(comment.user) }, { $set: { hasNewNotifications: true } })
 	revalidatePath(`/posts/${comment.post}`)
@@ -104,6 +106,8 @@ export const unlikeComment = actionClient.schema(idSchema).action<ReturnActionTy
 	await Notification.create({
 		user: String(comment.user),
 		body: `${session.currentUser?.name} a enlevé son like a votre réponse de post !`,
+		link: comment.post,
+		type: 'posts'
 	})
 	await User.findOneAndUpdate({ _id: String(comment.user) }, { $set: { hasNewNotifications: true } })
 	revalidatePath(`/posts/${comment.post}`)

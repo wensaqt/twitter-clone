@@ -18,37 +18,37 @@ async function analyzeImage(imageBase64: string): Promise<string> {
       // Créer un ID unique pour l'image temporaire
       const imageId = uuidv4();
       const tempDir = path.join(process.cwd(), 'temp');
-      
+
       // Créer le répertoire temp s'il n'existe pas
       if (!fs.existsSync(tempDir)) {
         fs.mkdirSync(tempDir, { recursive: true });
       }
-      
+
       // Chemin du fichier temporaire
       const imagePath = path.join(tempDir, `${imageId}.jpg`);
-      
+
       // Extraire les données d'image de la chaîne base64
       const base64Data = imageBase64.replace(/^data:image\/jpeg;base64,/, "");
-      
+
       // Écrire l'image dans un fichier temporaire
       fs.writeFileSync(imagePath, base64Data, 'base64');
-      
+
       // Lancer le script Python avec spawn
       const pythonPath = path.join(process.cwd(), './AI/.venv', 'Scripts', 'python.exe');
       const pythonProcess = spawn(pythonPath, ['./AI/script.py', imagePath]);
-      
+
       let pythonOutput = '';
-      
+
       // Récupérer la sortie du script Python
       pythonProcess.stdout.on('data', (data) => {
         pythonOutput += data.toString();
       });
-      
+
       // Gérer les erreurs du script Python
       pythonProcess.stderr.on('data', (data) => {
         console.error(`Python script error: ${data}`);
       });
-      
+
       // Gérer la fin de l'exécution du script
       pythonProcess.on('close', (code) => {
         try {
@@ -56,7 +56,7 @@ async function analyzeImage(imageBase64: string): Promise<string> {
           if (fs.existsSync(imagePath)) {
             fs.unlinkSync(imagePath);
           }
-          
+
           if (code !== 0) {
             console.error(`Python process exited with code ${code}`);
             resolve('neutral'); // Valeur par défaut en cas d'erreur
@@ -85,40 +85,40 @@ async function validateImageTransfer(imageBase64: string): Promise<any> {
       // Créer un ID unique pour l'image temporaire
       const imageId = uuidv4();
       const tempDir = path.join(process.cwd(), 'temp');
-      
+
       // Créer le répertoire temp s'il n'existe pas
       if (!fs.existsSync(tempDir)) {
         fs.mkdirSync(tempDir, { recursive: true });
       }
-      
+
       // Chemin du fichier temporaire
       const imagePath = path.join(tempDir, `${imageId}.jpg`);
-      
+
       // Extraire les données d'image de la chaîne base64
       const base64Data = imageBase64.replace(/^data:image\/jpeg;base64,/, "");
-      
+
       // Écrire l'image dans un fichier temporaire
       fs.writeFileSync(imagePath, base64Data, 'base64');
-      
+
       console.log(`Image temporaire créée: ${imagePath}`);
       console.log(`Taille du fichier: ${fs.statSync(imagePath).size} octets`);
-      
+
       // Lancer le script Python avec l'option de validation
       const pythonPath = path.join(process.cwd(), './AI/.venv', 'Scripts', 'python.exe');
       const pythonProcess = spawn(pythonPath, ['./AI/script.py', imagePath, '--validate']);
-      
+
       let pythonOutput = '';
-      
+
       // Récupérer la sortie du script Python
       pythonProcess.stdout.on('data', (data) => {
         pythonOutput += data.toString();
       });
-      
+
       // Gérer les erreurs du script Python
       pythonProcess.stderr.on('data', (data) => {
         console.error(`Validation error: ${data}`);
       });
-      
+
       // Gérer la fin de l'exécution du script
       pythonProcess.on('close', (code) => {
         try {
@@ -126,29 +126,29 @@ async function validateImageTransfer(imageBase64: string): Promise<any> {
           if (fs.existsSync(imagePath)) {
             fs.unlinkSync(imagePath);
           }
-          
+
           if (code !== 0) {
             console.error(`Python process exited with code ${code}`);
-            resolve({ 
-              success: false, 
+            resolve({
+              success: false,
               error: `Process exited with code ${code}`,
-              pythonOutput 
+              pythonOutput
             });
           } else {
             // Analyser la sortie du script Python
             try {
               const validationResult = JSON.parse(pythonOutput.trim());
               console.log("Validation de la transmission de l'image:", validationResult);
-              resolve({ 
+              resolve({
                 success: validationResult.status === "success",
-                ...validationResult 
+                ...validationResult
               });
             } catch (parseError) {
               console.error("Erreur de parsing JSON:", parseError);
-              resolve({ 
-                success: false, 
+              resolve({
+                success: false,
                 error: "Erreur de parsing JSON",
-                rawOutput: pythonOutput 
+                rawOutput: pythonOutput
               });
             }
           }
@@ -168,70 +168,72 @@ export async function POST(req: Request) {
   try {
     await connectToDatabase();
     const session = await getServerSession(authOptions);
-    
+
     // Récupérer les données de la requête
     const data = await req.json();
     const { body, postId, userId, imageData } = data;
-    
+
     // Vérifier s'il s'agit d'une réaction émotionnelle (avec imageData)
     if (imageData) {
       if (!session?.currentUser) {
         return NextResponse.json(
-          { error: "Vous devez être connecté pour partager une réaction" },
-          { status: 401 }
+            { error: "Vous devez être connecté pour partager une réaction" },
+            { status: 401 }
         );
       }
-      
+
       // Valider d'abord la transmission de l'image
       console.log("Validation de la transmission de l'image...");
       const validationResult = await validateImageTransfer(imageData);
-      
+
       if (!validationResult.success) {
         console.error("Échec de la validation:", validationResult);
         return NextResponse.json(
-          { error: "Erreur lors de la validation de l'image", details: validationResult },
-          { status: 400 }
+            { error: "Erreur lors de la validation de l'image", details: validationResult },
+            { status: 400 }
         );
       }
-      
+
       console.log("Validation réussie! Analyse de l'image...");
 
       // Analyser l'image avec Python pour détecter l'émotion
       console.log("Analyse de l'image...");
       const detectedEmotion = await analyzeImage(imageData);
       console.log(`Émotion détectée: ${detectedEmotion}`);
-      
+
       // Récupérer l'emoji correspondant à l'émotion
       const emotionEmoji = getEmotionEmoji(detectedEmotion);
-      
+
       // Créer un commentaire spécial pour la réaction émotionnelle
-      const reactionComment = await Comment.create({ 
+      const reactionComment = await Comment.create({
         body: `A réagi avec l'émotion: ${detectedEmotion} ${emotionEmoji}`,
-        post: postId, 
+        post: postId,
         user: session.currentUser._id,
         imageData: imageData,  // Stocker l'image en base64
         emotion: detectedEmotion,
         isEmotionReaction: true
       });
-      
+
       // Mettre à jour le post
-      const post = await Post.findByIdAndUpdate(postId, { 
-        $push: { comments: reactionComment._id } 
+      const post = await Post.findByIdAndUpdate(postId, {
+        $push: { comments: reactionComment._id }
       });
-      
+
       // Créer une notification
       await Notification.create({
         user: String(post.user),
         body: `${session.currentUser.name} a partagé une réaction ${emotionEmoji} à votre post!`,
+        link: postId,
+        type: 'posts'
       });
-      
+
       // Mettre à jour le statut de notification
       await User.findOneAndUpdate(
-        { _id: String(post.user) }, 
-        { $set: { hasNewNotifications: true } }
+          { _id: String(post.user) },
+          { $set: { hasNewNotifications: true } }
       );
-      
-      return NextResponse.json({ 
+
+      return NextResponse.json({
         success: true,
         comment: reactionComment,
         emotion: detectedEmotion,
@@ -239,7 +241,7 @@ export async function POST(req: Request) {
         validation: validationResult,
         message: "Réaction partagée avec succès"
       });
-    } 
+    }
     // Traitement standard des commentaires textuels
     else {
       const comment = await Comment.create({ body, post: postId, user: userId });
@@ -253,8 +255,8 @@ export async function POST(req: Request) {
       });
 
       await User.findOneAndUpdate(
-        { _id: String(post.user) },
-        { $set: { hasNewNotifications: true } }
+          { _id: String(post.user) },
+          { $set: { hasNewNotifications: true } }
       );
 
       return NextResponse.json(comment);
@@ -283,7 +285,7 @@ function getEmotionEmoji(emotion: string): string {
     tired: '😴',
     // Ajoutez d'autres émotions selon les résultats attendus de votre modèle
   };
-  
+
   return emotionMap[emotion.toLowerCase()] || '😐';
 }
 
@@ -303,8 +305,8 @@ export async function PUT(req: Request) {
     });
 
     await User.findOneAndUpdate(
-      { _id: String(comment.user) },
-      { $set: { hasNewNotifications: true } }
+        { _id: String(comment.user) },
+        { $set: { hasNewNotifications: true } }
     );
 
     return NextResponse.json({ message: "Commentaire aimé" });
