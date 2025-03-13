@@ -19,6 +19,7 @@ export interface IUser {
 	location: string
 	followers: string[]
 	following: string[]
+	savedPosts: string[]
 	hasNewNotifications: boolean
 	notifications: string[]
 	isFollowing: boolean
@@ -33,6 +34,7 @@ export interface IPost {
 	user: IUser
 	_id: string
 	hasLiked: boolean
+	hasSaved: boolean
 	imageData?: string
 	emotion?: string
 	isEmotionReaction?: boolean

@@ -6,12 +6,12 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { sliceText } from '@/lib/utils'
 import { formatDistanceToNowStrict } from 'date-fns'
 import { AiFillDelete, AiOutlineMessage } from 'react-icons/ai'
-import { FaHeart } from 'react-icons/fa'
+import { FaHeart, FaBookmark } from 'react-icons/fa'
 import { toast } from '../ui/use-toast'
 import { Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import useAction from '@/hooks/use-action'
-import { deleteLike, deletePost, likePost } from '@/actions/post.action'
+import { deleteLike, deletePost, likePost, savePost, deleteSave } from '@/actions/post.action'
 import CameraButton from './camera-button'
 
 interface Props {
@@ -48,6 +48,26 @@ const PostItem = ({ post, user }: Props) => {
 			res = await deleteLike({ id: post._id })
 		} else {
 			res = await likePost({ id: post._id })
+		}
+		if (res?.serverError || res?.validationErrors || !res?.data) {
+			return onError('Something went wrong')
+		}
+		if (res.data.failure) {
+			return onError(res.data.failure)
+		}
+		if (res.data.status === 200) {
+			setIsLoading(false)
+		}
+	}
+
+	const onSaved = async (e: React.MouseEvent<HTMLDivElement>) => {
+		e.stopPropagation()
+		setIsLoading(true)
+		let res
+		if (user.savedPosts.includes(post._id)) {
+			res = await deleteSave({ id: post._id })
+		} else {
+			res = await savePost({ id: post._id })
 		}
 		if (res?.serverError || res?.validationErrors || !res?.data) {
 			return onError('Something went wrong')
@@ -116,6 +136,15 @@ const PostItem = ({ post, user }: Props) => {
 							<FaHeart size={20} color={post.hasLiked ? 'red' : ''} />
 							<p>{post.likes || 0}</p>
 						</div>
+
+						<div
+							className={`flex flex-row items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-green-500`}
+							onClick={onSaved}
+							role='button'
+						>
+							<FaBookmark size={20} color={user.savedPosts.includes(post._id) ? 'green' : ''} />
+						</div>
+
 
 						<CameraButton 
 							postId={post._id} // Passez le postId au composant CameraButton
