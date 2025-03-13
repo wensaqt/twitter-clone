@@ -13,6 +13,12 @@ const PostSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
+    savedBy: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
     comments: [
       {
         type: mongoose.Schema.Types.ObjectId,

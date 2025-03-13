@@ -86,6 +86,22 @@ export const likePost = actionClient.schema(idSchema).action<ReturnActionType>(a
 	return { status: 200 }
 })
 
+export const savePost = actionClient.schema(idSchema).action<ReturnActionType>(async ({ parsedInput }) => {
+	const { id } = parsedInput
+	const session = await getServerSession(authOptions)
+	if (!session) return { failure: 'Vous devez être connecté pour enregistrer un post.' }
+	await connectToDatabase()
+	const currentPost = await Post.findById(id)
+	if (!currentPost) return { failure: 'Post not found.' }
+	if (session.currentUser?.savedPosts.includes(id)) return { failure: 'Vous avez déjà enregistré ce post.' }
+	await Post
+		.findByIdAndUpdate(id, { $push: { savedBy: session.currentUser?._id } })
+	await User
+		.findByIdAndUpdate(session.currentUser?._id, { $push: { savedPosts: id } })
+	revalidatePath('/')
+	return { status: 200 }
+})
+
 export const deletePost = actionClient.schema(idSchema).action<ReturnActionType>(async ({ parsedInput }) => {
 	const { id } = parsedInput
 	const session = await getServerSession(authOptions)
@@ -109,6 +125,20 @@ export const deleteLike = actionClient.schema(idSchema).action<ReturnActionType>
 	if (!currentPost) return { failure: 'Post not found.' }
 	if (!currentPost.likes.includes(session.currentUser?._id)) return { failure: "Vous n'avez pas like ce post." }
 	await Post.findByIdAndUpdate(id, { $pull: { likes: session.currentUser?._id } })
+	revalidatePath('/')
+	return { status: 200 }
+})
+
+export const deleteSave = actionClient.schema(idSchema).action<ReturnActionType>(async ({ parsedInput }) => {
+	const { id } = parsedInput
+	const session = await getServerSession(authOptions)
+	if (!session) return { failure: 'Vous devez être connecté pour supprimer un enregistrement.' }
+	await connectToDatabase()
+	const currentPost = await Post.findById(id)
+	if (!currentPost) return { failure: 'Post not found.' }
+	if (!currentPost.savedBy.includes(session.currentUser?._id)) return { failure: "Vous n'avez pas enregistré ce post." }
+	await Post.findByIdAndUpdate(id, { $pull: { savedBy: session.currentUser?._id } })
+	await User.findByIdAndUpdate(session.currentUser?._id, { $pull: { savedPosts: id } })
 	revalidatePath('/')
 	return { status: 200 }
 })

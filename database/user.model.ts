@@ -12,6 +12,7 @@ const UserSchema = new mongoose.Schema(
 		location: String,
 		following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 		followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+		savedPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
 		hasNewNotifications: Boolean,
 		notifications: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Notification' }],
 	},

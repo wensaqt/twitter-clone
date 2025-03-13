@@ -1,9 +1,11 @@
 import { getUser } from '@/actions/user.action'
 import ProfileBio from '@/components/profile/profile-bio'
 import ProfileHero from '@/components/profile/profile-hero'
+import SignetFeed from '@/components/profile/signet-feed'
 import Header from '@/components/shared/header'
 import PostFeed from '@/components/shared/post-feed'
 import { authOptions } from '@/lib/auth-options'
+import { Sign } from 'crypto'
 import { getServerSession } from 'next-auth'
 import React from 'react'
 
@@ -19,8 +21,10 @@ const Page = async ({ params }: { params: { userId: string } }) => {
 		<>
 			<Header label={user?.name!} isBack />
 			<ProfileHero user={user} />
-			<ProfileBio user={user} userId={JSON.parse(JSON.stringify(session?.currentUser?._id))} />
+			<ProfileBio user={user} userId={JSON.parse(JSON.stringify(session?.currentUser?._id))} />*
+			{/* <SignetFeed userId={params.userId} user={JSON.parse(JSON.stringify(session?.currentUser))} /> */}
 			<PostFeed userId={params.userId} user={JSON.parse(JSON.stringify(session?.currentUser))} />
+
 		</>
 	)
 }
