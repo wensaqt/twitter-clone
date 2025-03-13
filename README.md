@@ -14,13 +14,7 @@
 
 <h2>🛠️ Installation </h2>
 
-<p>1. Clonage repository</p>
-
-```
-docker compose up --build
-```
-
-<p>2. Configuration environnement</p>
+<p>1. Configuration environnement dans le fichier .env</p>
 
 ```
 MONGO_URI=
@@ -38,7 +32,13 @@ NEXTAUTH_URL=
 NEXTAUTH_SECRET=
 ```
 
-<h2>💻 Built with</h2>
+<p>2. Lancement de l'appli</p>
+
+```
+docker compose up --build
+```
+
+<h2>💻 Fait avec </h2>
 
 Technologies utilisées sur ce projet:
 
@@ -50,3 +50,6 @@ Technologies utilisées sur ce projet:
 - MongoDB
 - Mongoose
 - Docker
+
+<h2> Lien trello </h2>
+https://trello.com/invite/b/67d021ab7241c067b4390431/ATTIe45499ed31036a59a78f8860a60a2e81C89F5DB8/twitter-ai
