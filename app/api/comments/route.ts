@@ -34,7 +34,8 @@ async function analyzeImage(imageBase64: string): Promise<string> {
       fs.writeFileSync(imagePath, base64Data, 'base64');
       
       // Lancer le script Python avec spawn
-      const pythonProcess = spawn('python', ['print.py', imagePath]);
+      const pythonPath = path.join(process.cwd(), './AI/.venv', 'Scripts', 'python.exe');
+      const pythonProcess = spawn(pythonPath, ['./AI/script.py', imagePath]);
       
       let pythonOutput = '';
       
@@ -103,7 +104,8 @@ async function validateImageTransfer(imageBase64: string): Promise<any> {
       console.log(`Taille du fichier: ${fs.statSync(imagePath).size} octets`);
       
       // Lancer le script Python avec l'option de validation
-      const pythonProcess = spawn('python', ['print.py', imagePath, '--validate']);
+      const pythonPath = path.join(process.cwd(), './AI/.venv', 'Scripts', 'python.exe');
+      const pythonProcess = spawn(pythonPath, ['./AI/script.py', imagePath, '--validate']);
       
       let pythonOutput = '';
       
