@@ -117,9 +117,12 @@ const PostItem = ({ post, user }: Props) => {
 							<p>{post.likes || 0}</p>
 						</div>
 
-						<CameraButton onClick={(e) => {
-							e.stopPropagation();
-						}} />
+						<CameraButton 
+							postId={post._id} // Passez le postId au composant CameraButton
+							onClick={(e) => {
+								e.stopPropagation();
+							}} 
+						/>
 
 						{post.user._id === user._id && (
 							<div

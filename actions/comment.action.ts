@@ -44,6 +44,9 @@ export const getComments = actionClient.schema(paramsSchema).action<ReturnAction
 		likes: comment.likes.length,
 		hasLiked: comment.likes.includes(session?.currentUser?._id),
 		_id: comment._id,
+		imageData: comment.imageData,
+		emotion: comment.emotion,
+		isEmotionReaction: comment.isEmotionReaction,
 	}))
 
 	return JSON.parse(JSON.stringify({ comments: filteredComments, isNext }))
