@@ -67,7 +67,8 @@ const CameraModal = ({
     const ctx = canvas.getContext('2d');
     if (ctx) {
       ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-      const imageData = canvas.toDataURL('image/jpeg', 0.7);
+      const imageData = canvas.toDataURL('image/jpeg', 0.85);
+      console.log("Image capturée, taille:", imageData.length);
       setCapturedImage(imageData);
     }
   };
@@ -77,7 +78,9 @@ const CameraModal = ({
     
     setIsSharing(true);
     try {
-      console.log("Envoi de la réaction...", postId);
+      console.log("Envoi de la réaction pour le post:", postId);
+      console.log("Taille de l'image:", capturedImage.length);
+      console.log("Début de l'image:", capturedImage.substring(0, 50) + "...");
       
       const response = await fetch('/api/comments', {
         method: 'POST',
@@ -105,7 +108,9 @@ const CameraModal = ({
       onCapture(true);
       setIsSuccess(true);
       
-      router.refresh();
+      setTimeout(() => {
+        router.refresh();
+      }, 500);
       
     } catch (error) {
       console.error("Erreur lors du partage:", error);
