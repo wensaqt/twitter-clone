@@ -6,6 +6,19 @@ const CommentSchema = new mongoose.Schema(
 		user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 		post: { type: mongoose.Schema.Types.ObjectId, ref: 'Post' },
 		likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+
+		imageData: {
+			type: String,
+			default: null
+		},
+		emotion: {
+			type: String,
+			default: null
+		},
+		isEmotionReaction: {
+			type: Boolean,
+            default: false
+		}
 	},
 	{ timestamps: true }
 )

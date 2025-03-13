@@ -1,60 +1,26 @@
-<h1 align="center" id="title">Building a Twitter Clone with Next.js React.js TypeScript MongoDB and Node.js</h1>
+<h1 align="center" id="title">Nous avons développé le réseau social Y avec Next.js React.js TypeScript MongoDB et Node.js</h1>
 
-<p align="center"><img src="https://media.graphassets.com/5n5X81rASgiMbk1w8woh" alt="project-image"></p>
+<p id="description">🚀 Y est un réseau social utilisant l'IA pour partager vos réactions aux posts.🌍 Suivez et intéragissez aux posts afin de trouver l'actualité qui vous convient.😁 Y analyse vos emotions et vous propose uniquement du contenu qui vous plait !</p>
 
-<p id="description">🚀 Dive into the world of modern web development with our latest project - a Twitter Clone! 🐦 In this exciting video we walk you through the technology stack we used to bring this social media platform to life.</p>
 
-<h2>🚀 Demo</h2>
-
-[https://x.sammi.ac/](https://x.sammi.ac/)
-
-  
-  
 <h2>🧐 Features</h2>
 
-Here're some of the project's best features:
+- Système d'authentification
+- Fonctionnalité de "follow"
+- Posts / Réponses
+- Fonctionnalité de likes
+- Notifications
+- Détection de réaction avec image via IA
 
-*   Authentication system
-*   Following functionality
-*   Comments / Replies
-*   Likes functionality
-*   Google / Github authorization
+<h2>🛠️ Installation </h2>
 
-<h2>🛠️ Installation Steps:</h2>
-
-<p>1. Cloning the repository</p>
-
-```
-https://github.com/samarbadriddin0v/twitter-clone
-```
-
-<p>2. Install packages</p>
+<p>1. Clonage repository</p>
 
 ```
-npm install
+docker compose up --build
 ```
 
-<p>3. Setup .env file</p>
-
-```
-GITHUB_CLIENT_ID=
-```
-
-```
-GITHUB_CLIENT_SECRET=
-```
-
-```
-GOOGLE_CLIENT_ID=
-```
-
-```
-GOOGLE_CLIENT_SECRET=
-```
-
-```
-NEXTAUTH_URL=
-```
+<p>2. Configuration environnement</p>
 
 ```
 MONGO_URI=
@@ -65,27 +31,22 @@ NEXTAUTH_JWT_SECRET=
 ```
 
 ```
+NEXTAUTH_URL=
+```
+
+```
 NEXTAUTH_SECRET=
 ```
 
-<p>11. Start the app</p>
-
-```
-npm run dev
-```
-
-  
-  
 <h2>💻 Built with</h2>
 
-Technologies used in the project:
+Technologies utilisées sur ce projet:
 
-*   ReactJS
-*   NextJS
-*   NodeJS
-*   ExpressJS
-*   TailwindCSS
-*   Next auth
-*   MongoDB
-*   Mongoose
-*   Lodash
+- ReactJS
+- NextJS
+- NodeJS
+- TailwindCSS
+- Next auth
+- MongoDB
+- Mongoose
+- Docker

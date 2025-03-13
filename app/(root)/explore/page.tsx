@@ -8,6 +8,10 @@ import SearchInput from '@/components/shared/search-input'
 import { getUsers } from '@/actions/user.action'
 import { getPosts } from '@/actions/post.action'
 import Pagination from '@/components/shared/pagination'
+import dynamic from 'next/dynamic'
+
+// Import dynamique du composant d'animation
+const ExploreAnimation = dynamic(() => import('./explore-animation'), { ssr: false })
 
 interface Props {
   searchParams: SearchParams

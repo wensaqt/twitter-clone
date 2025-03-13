@@ -89,6 +89,16 @@ const CommentItem = ({ comment, user }: Props) => {
 					</div>
 					<div className='text-white mt-1'>{comment?.body}</div>
 
+					{comment.imageData && (
+						<div className="mt-2 bg-neutral-800/30 p-2 rounded-md overflow-hidden">
+							<img 
+								src={comment.imageData} 
+								alt="Réaction" 
+								className="max-h-32 w-full object-contain rounded" 
+							/>
+						</div>
+					)}
+
 					<div className='flex flex-row items-center mt-3 gap-10'>
 						<div
 							className={`flex flex-row items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-red-500`}

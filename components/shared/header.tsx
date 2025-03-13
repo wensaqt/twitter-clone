@@ -16,7 +16,7 @@ const Header = ({ label, isBack }: Props) => {
 	}
 
 	return (
-		<div className='border-b-[1px] border-neutral-800 w-full p-5'>
+		<div className='w-full p-5'>
 			<div className='flex flex-row items-center gap-2'>
 				{isBack && (
 					<BiArrowBack onClick={handleBack} color={'white'} size={20} className={'cursor-pointer hover:opacity-70 transition'} />

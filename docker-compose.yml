@@ -1,0 +1,40 @@
+services:
+  y:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    networks:
+      - y_bridge
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - y_bridge
+
+  python-app:
+    build:
+      context: ./AI
+      dockerfile: Dockerfile.python
+    volumes:
+      - ./ai/app:/app
+    networks:
+      - y_bridge
+
+volumes:
+  mongo-data:
+
+networks:
+  y_bridge:
+    driver: bridge

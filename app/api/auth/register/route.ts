@@ -1,7 +1,7 @@
 import User from "@/database/user.model";
 import { connectToDatabase } from "@/lib/mognoose";
 import { NextResponse } from "next/server";
-import { hash } from "bcrypt";
+import { hash } from "bcryptjs";
 
 export async function POST(req: Request) {
   try {

@@ -19,12 +19,17 @@ export interface IUser {
 	location: string
 	followers: string[]
 	following: string[]
+	savedPosts: string[]
 	hasNewNotifications: boolean
 	notifications: string[]
 	isFollowing: boolean
 }
 
 export interface IPost {
+	mediaType: string
+	mediaType: string
+	mediaType: string
+	mediaUrl: any
 	body: string
 	comments: number
 	createdAt: string
@@ -33,6 +38,12 @@ export interface IPost {
 	user: IUser
 	_id: string
 	hasLiked: boolean
+	hasSaved: boolean
+	imageData?: string
+	emotion?: string
+	isEmotionReaction?: boolean
+	mediaUrl?: string
+	mediaType?: 'image' | 'gif' | 'video' | null
 }
 
 export interface ReturnActionType {

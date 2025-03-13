@@ -5,6 +5,7 @@ import Button from '../ui/button'
 import { deleteNotifications } from '@/actions/user.action'
 import { useSession } from 'next-auth/react'
 import { toast } from '../ui/use-toast'
+import { Trash2 } from 'lucide-react'
 
 const ClearBtn = () => {
 	const { isLoading, onError, setIsLoading } = useAction()
@@ -20,15 +21,47 @@ const ClearBtn = () => {
 			return onError(res.data.failure)
 		}
 		if (res.data.status === 200) {
-			toast({ title: 'Success', description: 'Notifications nettoyée' })
+			toast({ title: 'Success', description: 'Notifications nettoyées' })
 			setIsLoading(false)
 		}
 	}
 
 	return (
-		<div className='mt-4 flex justify-center'>
-			<Button outline label={'Tout supprimer'} onClick={onClear} disabled={isLoading} isLoading={isLoading} />
-		</div>
+		<button
+		onClick={onClear}
+		disabled={isLoading}
+		className={`
+			relative flex items-center gap-1 
+			px-2 py-1 
+			rounded-md
+			text-xs font-medium
+			bg-transparent
+			border border-orange-500
+			text-orange-500
+			hover:bg-orange-500 hover:text-white
+			focus:outline-none 
+			focus:ring-2 focus:ring-orange-500
+			active:scale-95
+			transition-all duration-200
+			disabled:opacity-50 
+			disabled:cursor-not-allowed
+		`}
+		>
+		{isLoading ? (
+			<div
+			className="
+				h-3 w-3 
+				border border-orange-500 border-t-transparent
+				rounded-full animate-spin
+			"
+			/>
+		) : (
+			<Trash2 size={14} />
+		)}
+		<span>{isLoading ? 'Suppression...' : 'Tout supprimer'}</span>
+</button>
+
+	  
 	)
 }
 

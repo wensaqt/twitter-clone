@@ -10,6 +10,7 @@ import { ReturnActionType } from '@/types'
 import { FilterQuery } from 'mongoose'
 import { getServerSession } from 'next-auth'
 import { revalidatePath } from 'next/cache'
+import Notification from '@/database/notification.model'
 
 export const getPosts = actionClient.schema(paramsSchema).action<ReturnActionType>(async ({ parsedInput }) => {
 	const { page, pageSize, searchQuery } = parsedInput
@@ -22,22 +23,41 @@ export const getPosts = actionClient.schema(paramsSchema).action<ReturnActionTyp
 	const skipAmount = (+page - 1) * +pageSize
   
 	const posts = await Post.find(query)
-	  .populate({
-		path: 'user',
-		model: User,
-		select: 'name email profileImage _id username',
-	  })
-	  .sort({ createdAt: -1 })
-	  .skip(skipAmount)
-	  .limit(+pageSize)
-	  .lean()
   
-	const totalPosts = await Post.countDocuments(query)
-	const isNext = totalPosts > skipAmount + posts.length
-  
-	return JSON.parse(JSON.stringify({ posts, isNext }))
-  })
-  
+		.populate({
+			path: 'user',
+			model: User,
+			select: 'name email profileImage _id username',
+		})
+		.sort({ createdAt: -1 })
+		.skip(skipAmount)
+		.limit(+pageSize)
+
+	const totalProducts = await Post.countDocuments(query)
+	const isNext = totalProducts > skipAmount + +posts.length
+
+	const session = await getServerSession(authOptions)
+
+	const filteredPosts = posts.map(post => ({
+		body: post.body,
+		createdAt: post.createdAt,
+		user: {
+			_id: post.user._id,
+			name: post.user.name,
+			username: post.user.username,
+			profileImage: post.user.profileImage,
+			email: post.user.email,
+		},
+		likes: post.likes.length,
+		comments: post.comments.length,
+		hasLiked: post.likes.includes(session?.currentUser?._id),
+		_id: post._id,
+		mediaUrl: post.mediaUrl || null,
+		mediaType: post.mediaType || null
+	}))
+
+	return JSON.parse(JSON.stringify({ posts: filteredPosts, isNext }))
+})
 
 export const getPost = actionClient.schema(idSchema).action<ReturnActionType>(async ({ parsedInput }) => {
 	const { id } = parsedInput
@@ -48,10 +68,17 @@ export const getPost = actionClient.schema(idSchema).action<ReturnActionType>(as
 })
 
 export const createPost = actionClient.schema(createPostSchema).action<ReturnActionType>(async ({ parsedInput }) => {
-	const { body } = parsedInput
+	const { body, mediaUrl, mediaType } = parsedInput
 	const session = await getServerSession(authOptions)
 	if (!session) return { failure: 'Vous devez être connecté pour créer un post.' }
-	await Post.create({ body, user: session.currentUser?._id })
+
+	await Post.create({
+		body,
+		user: session.currentUser?._id,
+		mediaUrl: mediaUrl || null, 
+		mediaType: mediaType || null
+	})
+	
 	revalidatePath('/')
 	return { status: 200 }
 })
@@ -65,6 +92,25 @@ export const likePost = actionClient.schema(idSchema).action<ReturnActionType>(a
 	if (!currentPost) return { failure: 'Post non trouvé.' }
 	if (currentPost.likes.includes(session.currentUser?._id)) return { failure: 'Vous avez déjà aimé ce post.' }
 	await Post.findByIdAndUpdate(id, { $push: { likes: session.currentUser?._id } })
+	const userFollowed = await User.findById(session.currentUser?._id).select('username')
+	await Notification.create({ user: currentPost.user, body: `@${userFollowed.username} a liké votre post !`, link: id, type:'posts' })
+	await User.findOneAndUpdate({ _id: currentPost.user }, { $set: { hasNewNotifications: true } })
+	revalidatePath('/')
+	return { status: 200 }
+})
+
+export const savePost = actionClient.schema(idSchema).action<ReturnActionType>(async ({ parsedInput }) => {
+	const { id } = parsedInput
+	const session = await getServerSession(authOptions)
+	if (!session) return { failure: 'Vous devez être connecté pour enregistrer un post.' }
+	await connectToDatabase()
+	const currentPost = await Post.findById(id)
+	if (!currentPost) return { failure: 'Post not found.' }
+	if (session.currentUser?.savedPosts.includes(id)) return { failure: 'Vous avez déjà enregistré ce post.' }
+	await Post
+		.findByIdAndUpdate(id, { $push: { savedBy: session.currentUser?._id } })
+	await User
+		.findByIdAndUpdate(session.currentUser?._id, { $push: { savedPosts: id } })
 	revalidatePath('/')
 	return { status: 200 }
 })
@@ -92,6 +138,20 @@ export const deleteLike = actionClient.schema(idSchema).action<ReturnActionType>
 	if (!currentPost) return { failure: 'Post not found.' }
 	if (!currentPost.likes.includes(session.currentUser?._id)) return { failure: "Vous n'avez pas like ce post." }
 	await Post.findByIdAndUpdate(id, { $pull: { likes: session.currentUser?._id } })
+	revalidatePath('/')
+	return { status: 200 }
+})
+
+export const deleteSave = actionClient.schema(idSchema).action<ReturnActionType>(async ({ parsedInput }) => {
+	const { id } = parsedInput
+	const session = await getServerSession(authOptions)
+	if (!session) return { failure: 'Vous devez être connecté pour supprimer un enregistrement.' }
+	await connectToDatabase()
+	const currentPost = await Post.findById(id)
+	if (!currentPost) return { failure: 'Post not found.' }
+	if (!currentPost.savedBy.includes(session.currentUser?._id)) return { failure: "Vous n'avez pas enregistré ce post." }
+	await Post.findByIdAndUpdate(id, { $pull: { savedBy: session.currentUser?._id } })
+	await User.findByIdAndUpdate(session.currentUser?._id, { $pull: { savedPosts: id } })
 	revalidatePath('/')
 	return { status: 200 }
 })
