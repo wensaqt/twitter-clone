@@ -33,6 +33,9 @@ export interface IPost {
 	user: IUser
 	_id: string
 	hasLiked: boolean
+	imageData?: string
+	emotion?: string
+	isEmotionReaction?: boolean
 }
 
 export interface ReturnActionType {
