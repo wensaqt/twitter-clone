@@ -112,6 +112,35 @@ export const getUserPosts = actionClient.schema(idSchema).action<ReturnActionTyp
 	return JSON.parse(JSON.stringify({ posts: filteredPosts, status: 200 }))
 })
 
+export const getUserSavedPosts = actionClient.schema(idSchema).action<ReturnActionType>(async ({ parsedInput }) => {
+	const { id } = parsedInput
+	await connectToDatabase()
+	const session = await getServerSession(authOptions)
+	if (!session) return { failure: 'Vous devez être connecté pour voir les posts sauvegardés' }
+	const user
+		= await User.findById(id).populate({ path: 'savedPosts', model: Post, select: 'body createdAt user likes comments _id' })
+	const posts = user.savedPosts
+	
+	const filteredPosts = posts.map((post:any) => ({
+		body: post.body,
+		createdAt: post.createdAt,
+		user: {
+			_id: post.user._id,
+			name: post.user.name,
+			username: post.user.username,
+			profileImage: post.user.profileImage,
+			email: post.user.email,
+		},
+		likes: post.likes.length,
+		comments: post.comments.length,
+		hasLiked: post.likes.includes(session.currentUser?._id),
+		_id: post._id,
+	}))
+
+	return JSON.parse(JSON.stringify({ posts: filteredPosts, status: 200 }))
+})
+
+
 export const updateUser = actionClient.schema(updateUserSchema).action<ReturnActionType>(async ({ parsedInput }) => {
 	const { id, type } = parsedInput
 	await connectToDatabase()
