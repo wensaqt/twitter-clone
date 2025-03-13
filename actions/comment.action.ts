@@ -31,23 +31,33 @@ export const getComments = actionClient.schema(paramsSchema).action<ReturnAction
 
 	const session = await getServerSession(authOptions)
 
-	const filteredComments = comments.map(comment => ({
-		body: comment.body,
-		createdAt: comment.createdAt,
-		user: {
-			_id: comment.user._id,
-			name: comment.user.name,
-			username: comment.user.username,
-			profileImage: comment.user.profileImage,
-			email: comment.user.email,
-		},
-		likes: comment.likes.length,
-		hasLiked: comment.likes.includes(session?.currentUser?._id),
-		_id: comment._id,
-		imageData: comment.imageData,
-		emotion: comment.emotion,
-		isEmotionReaction: comment.isEmotionReaction,
-	}))
+	const filteredComments = comments.map(comment => {
+		let imageData = comment.imageData;
+		
+		if (imageData && imageData.length > 0) {
+			console.log(`Image trouvée pour le commentaire ${comment._id}, taille: ${imageData.length}`);
+		} else {
+			console.log(`Pas d'image pour le commentaire ${comment._id}`);
+		}
+		
+		return {
+			body: comment.body,
+			createdAt: comment.createdAt,
+			user: {
+				_id: comment.user._id,
+				name: comment.user.name,
+				username: comment.user.username,
+				profileImage: comment.user.profileImage,
+				email: comment.user.email,
+			},
+			likes: comment.likes.length,
+			hasLiked: comment.likes.includes(session?.currentUser?._id),
+			_id: comment._id,
+			imageData: imageData,
+			emotion: comment.emotion,
+			isEmotionReaction: comment.isEmotionReaction,
+		};
+	});
 
 	return JSON.parse(JSON.stringify({ comments: filteredComments, isNext }))
 })
