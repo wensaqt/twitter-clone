@@ -39,8 +39,10 @@ export const paramsSchema = z.object({
 })
 
 export const createPostSchema = z.object({
-	body: z.string().min(3),
-})
+    body: z.string().min(3),
+    mediaUrl: z.string().optional().nullable(),
+    mediaType: z.enum(['image', 'gif', 'video']).nullable().optional()
+});
 
 export const idSchema = z.object({
 	id: z.string(),
