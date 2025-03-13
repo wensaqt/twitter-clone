@@ -11,9 +11,8 @@ services:
       - .:/app
       - /app/node_modules
       - /app/.next
-
     networks:
-      - twitter_bridge
+      - y_bridge
 
   mongo:
     image: mongo:latest
@@ -22,11 +21,20 @@ services:
     volumes:
       - mongo-data:/data/db
     networks:
-      - twitter_bridge
+      - y_bridge
+
+  python-app:
+    build:
+      context: ./AI
+      dockerfile: Dockerfile.python
+    volumes:
+      - ./ai/app:/app
+    networks:
+      - y_bridge
 
 volumes:
   mongo-data:
 
 networks:
-  twitter_bridge:
+  y_bridge:
     driver: bridge
