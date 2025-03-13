@@ -27,7 +27,7 @@ const SearchInput = () => {
 	return (
 		<div className='relative'>
 			<Input
-				placeholder='Rechercher des utilisateurs'
+				placeholder='Rechercher'
 				className='mt-2 w-[98%] mx-auto block border-none bg-neutral-900 text-white'
 				onChange={debouncedSearch}
 			/>

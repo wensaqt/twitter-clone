@@ -13,13 +13,17 @@ import { revalidatePath } from 'next/cache'
 import Notification from '@/database/notification.model'
 
 export const getPosts = actionClient.schema(paramsSchema).action<ReturnActionType>(async ({ parsedInput }) => {
-	const { page, pageSize } = parsedInput
+	const { page, pageSize, searchQuery } = parsedInput
 	await connectToDatabase()
-
-	const query: FilterQuery<typeof Post> = {}
+  
+	const query: FilterQuery<typeof Post> = searchQuery
+	  ? { body: { $regex: searchQuery, $options: 'i' } }
+	  : {}
+  
 	const skipAmount = (+page - 1) * +pageSize
-
+  
 	const posts = await Post.find(query)
+  
 		.populate({
 			path: 'user',
 			model: User,
