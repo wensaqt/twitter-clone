@@ -1,7 +1,7 @@
 'use client'
 
 import { IPost, IUser } from '@/types'
-import React, { MouseEvent, useState } from 'react'
+import React, { MouseEvent, useState, useEffect } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { sliceText } from '@/lib/utils'
 import { formatDistanceToNowStrict } from 'date-fns'
@@ -21,8 +21,14 @@ interface Props {
 
 const PostItem = ({ post, user }: Props) => {
 	const { isLoading, setIsLoading, onError } = useAction()
-	const [reaction, setReaction] = useState<string | null>(null);
+	const [reaction, setReaction] = useState<string | null>(null)
 	const router = useRouter()
+	
+	const [isClient, setIsClient] = useState(false)
+	
+	useEffect(() => {
+		setIsClient(true)
+	}, [])
 
 	const onDelete = async (e: MouseEvent<HTMLDivElement>) => {
 		e.stopPropagation()
@@ -115,7 +121,27 @@ const PostItem = ({ post, user }: Props) => {
 
 					<div className='text-white mt-1'>{post.body}</div>
 					
-					{reaction && (
+					{isClient && post.mediaUrl && (
+						<div className="mt-2 bg-neutral-800/30 p-2 rounded-md overflow-hidden">
+							<img 
+								src={post.mediaUrl} 
+								alt={post.mediaType === 'gif' ? "GIF" : "Image"} 
+								className="max-h-80 w-full object-contain rounded" 
+							/>
+						</div>
+					)}
+					
+					{isClient && post.imageData && (
+						<div className="mt-2 bg-neutral-800/30 p-2 rounded-md overflow-hidden">
+							<img 
+								src={post.imageData} 
+								alt="Réaction" 
+								className="max-h-32 w-full object-contain rounded" 
+							/>
+						</div>
+					)}
+					
+					{isClient && reaction && (
 						<div className="mt-2 bg-neutral-800/30 p-2 rounded-md">
 							<p className="text-xs text-neutral-400 mb-1">Ma réaction :</p>
 							<img src={reaction} alt="Réaction" className="max-h-32 rounded object-contain" />
@@ -147,7 +173,7 @@ const PostItem = ({ post, user }: Props) => {
 
 
 						<CameraButton 
-							postId={post._id} // Passez le postId au composant CameraButton
+							postId={post._id}
 							onClick={(e) => {
 								e.stopPropagation();
 							}} 

@@ -26,6 +26,10 @@ export interface IUser {
 }
 
 export interface IPost {
+	mediaType: string
+	mediaType: string
+	mediaType: string
+	mediaUrl: any
 	body: string
 	comments: number
 	createdAt: string
@@ -38,6 +42,8 @@ export interface IPost {
 	imageData?: string
 	emotion?: string
 	isEmotionReaction?: boolean
+	mediaUrl?: string
+	mediaType?: 'image' | 'gif' | 'video' | null
 }
 
 export interface ReturnActionType {

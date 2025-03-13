@@ -52,7 +52,16 @@ const Page = async ({ params, searchParams }: Props) => {
 								</span>
 							</div>
 							<div className='text-white mt-1'>{post?.body}</div>
-						</div>
+								{post?.mediaUrl && (
+								<div className="mt-2 bg-neutral-800/30 p-2 rounded-md overflow-hidden">
+									<img 
+									src={post.mediaUrl} 
+									alt={post.mediaType === 'gif' ? "GIF" : "Image"} 
+									className="max-h-80 w-full object-contain rounded" 
+									/>
+								</div>
+								)}
+							</div>
 					</div>
 				</div>
 

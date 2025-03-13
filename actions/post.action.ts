@@ -48,6 +48,8 @@ export const getPosts = actionClient.schema(paramsSchema).action<ReturnActionTyp
 		comments: post.comments.length,
 		hasLiked: post.likes.includes(session?.currentUser?._id),
 		_id: post._id,
+		mediaUrl: post.mediaUrl || null,
+		mediaType: post.mediaType || null
 	}))
 
 	return JSON.parse(JSON.stringify({ posts: filteredPosts, isNext }))
@@ -62,10 +64,17 @@ export const getPost = actionClient.schema(idSchema).action<ReturnActionType>(as
 })
 
 export const createPost = actionClient.schema(createPostSchema).action<ReturnActionType>(async ({ parsedInput }) => {
-	const { body } = parsedInput
+	const { body, mediaUrl, mediaType } = parsedInput
 	const session = await getServerSession(authOptions)
 	if (!session) return { failure: 'Vous devez être connecté pour créer un post.' }
-	await Post.create({ body, user: session.currentUser?._id })
+
+	await Post.create({
+		body,
+		user: session.currentUser?._id,
+		mediaUrl: mediaUrl || null, 
+		mediaType: mediaType || null
+	})
+	
 	revalidatePath('/')
 	return { status: 200 }
 })

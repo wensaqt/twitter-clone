@@ -52,6 +52,8 @@ export async function GET(req: Request) {
 			comments: post.comments.length,
 			hasLiked: post.likes.includes(currentUser._id),
 			_id: post._id,
+			mediaUrl: post.mediaUrl || null,    
+			mediaType: post.mediaType || null   
 		}))
 
 		return NextResponse.json(filteredPosts)

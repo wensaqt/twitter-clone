@@ -7,6 +7,15 @@ const PostSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+    mediaUrl: {
+      type: String,
+      default: null
+    },
+    mediaType: {
+      type: String,
+      enum: ['image', 'gif', 'video', null],
+      default: null
+    },
     likes: [
       {
         type: mongoose.Schema.Types.ObjectId,
