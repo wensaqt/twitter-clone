@@ -53,7 +53,7 @@ export default function Auth() {
                   {" "}
                   Politique de vie privée
                 </span>
-                , incluant lutilisation de
+                , incluant l'utilisation de
                 <span className="text-orange-500"> Cookies</span>.
               </div>
               <div className="flex items-center justify-center">
