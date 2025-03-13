@@ -189,6 +189,74 @@ return (
             />
           </div>
         )}
+        <div className='mt-2 flex flex-row justify-between items-center'>
+
+
+
+          <div className="flex items-center gap-4">
+
+
+            <label className="cursor-pointer text-orange-500 hover:text-orange-600 transition">
+
+
+              <ImageIcon size={20} />
+
+
+              <input
+
+
+                  type="file"
+
+
+                  accept="image/*"
+
+
+                  className="hidden"
+
+
+                  ref={fileInputRef}
+
+
+                  onChange={handleImageUpload}
+
+
+                  disabled={isLoading}
+
+
+              />
+
+
+            </label>
+
+
+
+
+
+            <button
+
+
+                onClick={() => setShowGifSelector(!showGifSelector)}
+
+
+                className="text-orange-500 hover:text-orange-600 transition"
+
+
+                disabled={isLoading}
+
+
+                type="button"
+
+
+            >
+
+
+              <Film size={20} />
+
+
+            </button>
+
+
+          </div>
 
         {isMentioning && mentionQuery && suggestions.length > 0 && (
           <div className='absolute mt-2 w-full bg-black rounded-lg shadow-lg'>
@@ -218,6 +286,8 @@ return (
             onClick={validatePost}
             isLoading={isLoading}
           />
+        </div>
+
         </div>
       </div>
     </div>
