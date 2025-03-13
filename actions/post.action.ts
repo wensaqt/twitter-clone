@@ -12,45 +12,32 @@ import { getServerSession } from 'next-auth'
 import { revalidatePath } from 'next/cache'
 
 export const getPosts = actionClient.schema(paramsSchema).action<ReturnActionType>(async ({ parsedInput }) => {
-	const { page, pageSize } = parsedInput
+	const { page, pageSize, searchQuery } = parsedInput
 	await connectToDatabase()
-
-	const query: FilterQuery<typeof Post> = {}
+  
+	const query: FilterQuery<typeof Post> = searchQuery
+	  ? { body: { $regex: searchQuery, $options: 'i' } }
+	  : {}
+  
 	const skipAmount = (+page - 1) * +pageSize
-
+  
 	const posts = await Post.find(query)
-		.populate({
-			path: 'user',
-			model: User,
-			select: 'name email profileImage _id username',
-		})
-		.sort({ createdAt: -1 })
-		.skip(skipAmount)
-		.limit(+pageSize)
-
-	const totalProducts = await Post.countDocuments(query)
-	const isNext = totalProducts > skipAmount + +posts.length
-
-	const session = await getServerSession(authOptions)
-
-	const filteredPosts = posts.map(post => ({
-		body: post.body,
-		createdAt: post.createdAt,
-		user: {
-			_id: post.user._id,
-			name: post.user.name,
-			username: post.user.username,
-			profileImage: post.user.profileImage,
-			email: post.user.email,
-		},
-		likes: post.likes.length,
-		comments: post.comments.length,
-		hasLiked: post.likes.includes(session?.currentUser?._id),
-		_id: post._id,
-	}))
-
-	return JSON.parse(JSON.stringify({ posts: filteredPosts, isNext }))
-})
+	  .populate({
+		path: 'user',
+		model: User,
+		select: 'name email profileImage _id username',
+	  })
+	  .sort({ createdAt: -1 })
+	  .skip(skipAmount)
+	  .limit(+pageSize)
+	  .lean()
+  
+	const totalPosts = await Post.countDocuments(query)
+	const isNext = totalPosts > skipAmount + posts.length
+  
+	return JSON.parse(JSON.stringify({ posts, isNext }))
+  })
+  
 
 export const getPost = actionClient.schema(idSchema).action<ReturnActionType>(async ({ parsedInput }) => {
 	const { id } = parsedInput
