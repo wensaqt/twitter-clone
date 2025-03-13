@@ -21,7 +21,7 @@ const Page = async ({ params }: { params: { userId: string } }) => {
 		<>
 			<Header label={user?.name!} isBack />
 			<ProfileHero user={user} />
-			<ProfileBio user={user} userId={JSON.parse(JSON.stringify(session?.currentUser?._id))} />*
+			<ProfileBio user={user} userId={JSON.parse(JSON.stringify(session?.currentUser?._id))} />
 			{/* <SignetFeed userId={params.userId} user={JSON.parse(JSON.stringify(session?.currentUser))} /> */}
 			<PostFeed userId={params.userId} user={JSON.parse(JSON.stringify(session?.currentUser))} />
 
