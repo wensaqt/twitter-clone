@@ -21,6 +21,7 @@ const Form = ({ placeholder, user, isComment }: Props) => {
 	const { isLoading, setIsLoading, onError } = useAction()
 	const [body, setBody] = useState('')
 	const { postId } = useParams<{ postId: string }>()
+	const regexHashtag = new RegExp(".*#[a-z0-9_]+", "g")
 
 	const onSubmit = async () => {
 		setIsLoading(true)
@@ -67,7 +68,8 @@ const Form = ({ placeholder, user, isComment }: Props) => {
 							label={isComment ? 'Répondre' : 'Poster'}
 							classNames='px-8'
 							disabled={isLoading || !body}
-							onClick={onSubmit}
+							onClick={isComment || regexHashtag.test(body) ? onSubmit : () => toast({ title: 'Error', description: 'Votre tweet doit contenir un hashtag', variant: 'destructive' })}
+							
 							isLoading={isLoading}
 						/>
 					</div>
